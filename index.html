@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Placar de Emendas PIX 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#111827}
+  .header{background:linear-gradient(135deg,#0f2044 0%,#1d4ed8 100%);color:#fff;padding:36px 32px 32px}
+  .header h1{font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-0.5px}
+  .header p{opacity:.65;font-size:12px;margin-top:4px}
+  .header .sub{font-size:14px;opacity:.85;margin-top:2px;font-weight:400}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 32px 4px}
+  .kpi{background:#fff;border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .kpi-val{font-size:22px;font-weight:800;color:#1d4ed8;margin-bottom:2px}
+  .kpi-label{font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em}
+  .destaques{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px 32px 4px}
+  .destaque{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #1d4ed8}
+  .destaque.verde{border-left-color:#059669}
+  .destaque.laranja{border-left-color:#f59e0b}
+  .destaque .d-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-bottom:4px}
+  .destaque .d-nome{font-size:14px;font-weight:700;color:#111}
+  .destaque .d-val{font-size:12px;color:#6b7280;margin-top:2px}
+  .content{padding:12px 32px 40px}
+  .section{background:#fff;border-radius:12px;padding:22px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .section h2{font-size:14px;font-weight:700;margin-bottom:14px;color:#111;border-bottom:1px solid #f3f4f6;padding-bottom:10px;display:flex;align-items:center;gap:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;padding:6px 8px;color:#9ca3af;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;user-select:none;white-space:nowrap;background:#fafafa}
+  th:hover{color:#374151}
+  th.sorted-asc::after{content:' ▲'}
+  th.sorted-desc::after{content:' ▼'}
+  td{padding:8px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+  tr:hover td{background:#fafbff}
+  .search-bar{display:flex;gap:8px;margin-bottom:10px}
+  .search-bar input{flex:1;padding:7px 12px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;background:#fafafa}
+  .search-bar input:focus{border-color:#3b82f6;background:#fff}
+  .filter-btns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+  .fbtn{padding:3px 11px;border-radius:999px;font-size:11px;cursor:pointer;border:1px solid #e5e7eb;background:#fff;transition:all .12s;font-weight:500}
+  .fbtn.active{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
+  .nota{font-size:11px;color:#9ca3af;margin-top:10px;line-height:1.6}
+  canvas{max-height:260px}
+  details summary{cursor:pointer;font-size:13px;color:#6b7280;padding:8px 0;font-weight:500}
+  details summary:hover{color:#111}
+  details[open] summary{color:#111;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>💸 Placar de Emendas PIX 2025</h1>
+  <div class="sub">Onde cada parlamentar federal mandou seu dinheiro</div>
+  <p>Transferências especiais (art. 166-A CF) · TransfereGov · Câmara · Senado · IBGE · 2026-04-08</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="kpi-val">R$ 5.33B</div><div class="kpi-label">Total distribuído em 2025</div></div>
+  <div class="kpi"><div class="kpi-val">6,834</div><div class="kpi-label">Transferências realizadas</div></div>
+  <div class="kpi"><div class="kpi-val">468</div><div class="kpi-label">Parlamentares mapeados</div></div>
+  <div class="kpi"><div class="kpi-val">R$ 11.4M</div><div class="kpi-label">Média por parlamentar</div></div>
+</div>
+
+<div class="destaques">
+  <div class="destaque">
+    <div class="d-label">💰 Quem mais distribuiu</div>
+    <div class="d-nome">Jayme Campos</div>
+    <div class="d-val">R$ 43.4M · UNIÃO/MT</div>
+  </div>
+  <div class="destaque verde">
+    <div class="d-label">🌿 Mais redistributivo (Δ IDH)</div>
+    <div class="d-nome">Marcos Rogério</div>
+    <div class="d-val">IDH destino 0.7 · 100% para N+NE</div>
+  </div>
+  <div class="destaque laranja">
+    <div class="d-label">🗺️ Região mais beneficiada</div>
+    <div class="d-nome">Norte e Nordeste</div>
+    <div class="d-val">R$ 2.45B · 90% do total</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- Ranking Deputados -->
+  <div class="section">
+    <h2>🏆 Ranking — Deputados Federais</h2>
+    <div class="search-bar">
+      <input type="text" id="search-dep" placeholder="Buscar por nome, partido ou UF..." oninput="filtrarTabela('dep')">
+    </div>
+    <div class="filter-btns" id="filter-dep">
+      <span class="fbtn active" onclick="setFiltro('dep','')">Todos</span>
+      <span class="fbtn" onclick="setFiltro('dep','PT')">PT</span>
+      <span class="fbtn" onclick="setFiltro('dep','PL')">PL</span>
+      <span class="fbtn" onclick="setFiltro('dep','UNIÃO')">UNIÃO</span>
+      <span class="fbtn" onclick="setFiltro('dep','MDB')">MDB</span>
+      <span class="fbtn" onclick="setFiltro('dep','PSD')">PSD</span>
+    </div>
+    <div style="overflow-x:auto">
+    <table id="table-dep">
+      <thead><tr>
+        <th onclick="sortTable('table-dep',0,'num')">#</th>
+        <th onclick="sortTable('table-dep',1,'str')">Parlamentar</th>
+        <th onclick="sortTable('table-dep',2,'brl')" class="sorted-desc">Total R$</th>
+        <th onclick="sortTable('table-dep',3,'num')"># emendas</th>
+        <th onclick="sortTable('table-dep',4,'num')">% ao estado</th>
+        <th onclick="sortTable('table-dep',5,'num')">IDH destino</th>
+        <th onclick="sortTable('table-dep',6,'str')">Δ IDH</th>
+        <th onclick="sortTable('table-dep',7,'num')">% N+NE</th>
+      </tr></thead>
+      <tbody><tr data-nome="FERNANDO FARIAS" data-partido="PSD" data-uf="MG"
+                       data-total="35808158.43" data-conc="0.0"
+                       data-idh="0.684" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">1</td>
+            <td><strong style="font-size:13px">Fernando Farias</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · MG</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 35.8M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">59</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:0.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">0.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.684</td>
+            <td style="font-size:12px;color:#059669">▲ 0.090</td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="ACACIO FAVACHO" data-partido="MDB" data-uf="AP"
+                       data-total="30313800.0" data-conc="100.0"
+                       data-idh="0.688" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">2</td>
+            <td><strong style="font-size:13px">Acácio Favacho</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · AP</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 30.3M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">21</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.688</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="CAPITAO ALBERTO NETO" data-partido="PL" data-uf="AM"
+                       data-total="28214182.259999998" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">3</td>
+            <td><strong style="font-size:13px">Capitão Alberto Neto</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · AM</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 28.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">50</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="PASTOR GIL" data-partido="PL" data-uf="MA"
+                       data-total="26462095.11" data-conc="100.0"
+                       data-idh="0.676" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">4</td>
+            <td><strong style="font-size:13px">Pastor Gil</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · MA</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 26.5M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">26</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.676</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="JULIO LOPES" data-partido="PP" data-uf="RJ"
+                       data-total="25084612.08" data-conc="100.0"
+                       data-idh="0.762" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">5</td>
+            <td><strong style="font-size:13px">Julio Lopes</strong><br>
+                <span style="color:#6b7280;font-size:11px">PP · RJ</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 25.1M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">19</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.762</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="IDILVAN ALENCAR" data-partido="PDT" data-uf="CE"
+                       data-total="24738110.1" data-conc="100.0"
+                       data-idh="0.734" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">6</td>
+            <td><strong style="font-size:13px">Idilvan Alencar</strong><br>
+                <span style="color:#6b7280;font-size:11px">PDT · CE</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 24.7M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">43</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.734</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="PASTOR DINIZ" data-partido="UNIÃO" data-uf="RR"
+                       data-total="24651000.0" data-conc="100.0"
+                       data-idh="0.699" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">7</td>
+            <td><strong style="font-size:13px">Pastor Diniz</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · RR</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 24.7M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">14</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.699</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="MATHEUS NORONHA" data-partido="PL" data-uf="CE"
+                       data-total="24391612.08" data-conc="100.0"
+                       data-idh="0.734" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">8</td>
+            <td><strong style="font-size:13px">Matheus Noronha</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · CE</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 24.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">9</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.734</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="LUCIO MOSQUINI" data-partido="PL" data-uf="RO"
+                       data-total="24391612.08" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">9</td>
+            <td><strong style="font-size:13px">Lucio Mosquini</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · RO</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 24.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">46</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="CORONEL ULYSSES" data-partido="UNIÃO" data-uf="AC"
+                       data-total="23884724.159999996" data-conc="100.0"
+                       data-idh="0.71" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">10</td>
+            <td><strong style="font-size:13px">Coronel Ulysses</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · AC</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 23.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">32</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.71</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="DUDA RAMOS" data-partido="MDB" data-uf="RR"
+                       data-total="23214891.150000002" data-conc="100.0"
+                       data-idh="0.699" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">11</td>
+            <td><strong style="font-size:13px">Duda Ramos</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · RR</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 23.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">14</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.699</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="JOSE AIRTON FELIX CIRILO" data-partido="PT" data-uf="CE"
+                       data-total="22983260.85" data-conc="100.0"
+                       data-idh="0.734" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">12</td>
+            <td><strong style="font-size:13px">José Airton Félix Cirilo</strong><br>
+                <span style="color:#6b7280;font-size:11px">PT · CE</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 23.0M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">7</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.734</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="DAGOBERTO NOGUEIRA" data-partido="PSDB" data-uf="MS"
+                       data-total="22906611.09" data-conc="100.0"
+                       data-idh="0.742" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">13</td>
+            <td><strong style="font-size:13px">Dagoberto Nogueira</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSDB · MS</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 22.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">29</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.742</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="MARX BELTRAO" data-partido="PP" data-uf="AL"
+                       data-total="22671000.0" data-conc="100.0"
+                       data-idh="0.684" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">14</td>
+            <td><strong style="font-size:13px">Marx Beltrão</strong><br>
+                <span style="color:#6b7280;font-size:11px">PP · AL</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 22.7M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">24</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.684</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="RENILCE NICODEMOS" data-partido="MDB" data-uf="PA"
+                       data-total="22602874.14" data-conc="100.0"
+                       data-idh="0.69" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">15</td>
+            <td><strong style="font-size:13px">Renilce Nicodemos</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · PA</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 22.6M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">20</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.69</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="DUARTE JR." data-partido="PSB" data-uf="MA"
+                       data-total="21916612.080000002" data-conc="100.0"
+                       data-idh="0.676" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">16</td>
+            <td><strong style="font-size:13px">Duarte Jr.</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSB · MA</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">11</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.676</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="JUNIOR LOURENCO" data-partido="PL" data-uf="MA"
+                       data-total="21853773.810000002" data-conc="100.0"
+                       data-idh="0.676" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">17</td>
+            <td><strong style="font-size:13px">Junior Lourenço</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · MA</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">13</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.676</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="EUNICIO OLIVEIRA" data-partido="MDB" data-uf="CE"
+                       data-total="21718612.08" data-conc="100.0"
+                       data-idh="0.734" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">18</td>
+            <td><strong style="font-size:13px">Eunício Oliveira</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · CE</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.7M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">26</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.734</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="LUCIANO VIEIRA" data-partido="PSDB" data-uf="RJ"
+                       data-total="21481792.200000003" data-conc="100.0"
+                       data-idh="0.762" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">19</td>
+            <td><strong style="font-size:13px">Luciano Vieira</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSDB · RJ</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.5M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">10</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.762</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="GUSTINHO RIBEIRO" data-partido="REPUBLICANOS" data-uf="SE"
+                       data-total="21322612.08" data-conc="100.0"
+                       data-idh="0.702" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">20</td>
+            <td><strong style="font-size:13px">Gustinho Ribeiro</strong><br>
+                <span style="color:#6b7280;font-size:11px">REPUBLICANOS · SE</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.3M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">16</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.702</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="PEDRO LUCAS FERNANDES" data-partido="UNIÃO" data-uf="MA"
+                       data-total="21148385.939999998" data-conc="100.0"
+                       data-idh="0.676" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">21</td>
+            <td><strong style="font-size:13px">Pedro Lucas Fernandes</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · MA</span></td>
+            <td style="text-align:right;font-weight:700;color:#1d4ed8;font-size:13px">R$ 21.1M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">22</td>
+            <td><div style="min-width:70px"><div style="background:#1d4ed8;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.676</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr></tbody>
+    </table>
+    </div>
+    <p class="nota">
+      <strong>IDH destino</strong> = IDH médio ponderado dos estados que receberam as emendas (PNUD 2010).
+      <strong>Δ IDH</strong> = IDH do estado do parlamentar menos IDH destino: ▲ verde = manda para estados mais pobres (redistributivo); ▼ vermelho = manda para estados mais ricos.
+      <strong>% N+NE</strong> = parcela das emendas direcionada às regiões Norte e Nordeste.
+    </p>
+  </div>
+
+  <!-- Ranking Senadores -->
+  <div class="section">
+    <h2>🏛️ Ranking — Senadores</h2>
+    <div class="search-bar">
+      <input type="text" id="search-sen" placeholder="Buscar por nome, partido ou UF..." oninput="filtrarTabela('sen')">
+    </div>
+    <div style="overflow-x:auto">
+    <table id="table-sen">
+      <thead><tr>
+        <th onclick="sortTable('table-sen',0,'num')">#</th>
+        <th onclick="sortTable('table-sen',1,'str')">Parlamentar</th>
+        <th onclick="sortTable('table-sen',2,'brl')" class="sorted-desc">Total R$</th>
+        <th onclick="sortTable('table-sen',3,'num')"># emendas</th>
+        <th onclick="sortTable('table-sen',4,'num')">% ao estado</th>
+        <th onclick="sortTable('table-sen',5,'num')">IDH destino</th>
+        <th onclick="sortTable('table-sen',6,'str')">Δ IDH</th>
+        <th onclick="sortTable('table-sen',7,'num')">% N+NE</th>
+      </tr></thead>
+      <tbody><tr data-nome="JAYME CAMPOS" data-partido="UNIÃO" data-uf="MT"
+                       data-total="43382355.39000001" data-conc="100.0"
+                       data-idh="0.736" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">1</td>
+            <td><strong style="font-size:13px">Jayme Campos</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · MT</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 43.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">72</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.736</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="MARCOS ROGERIO" data-partido="PL" data-uf="RO"
+                       data-total="41154156.45" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">2</td>
+            <td><strong style="font-size:13px">Marcos Rogério</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · RO</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 41.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">40</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="RENAN CALHEIROS" data-partido="MDB" data-uf="AL"
+                       data-total="40283100.0" data-conc="100.0"
+                       data-idh="0.684" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">3</td>
+            <td><strong style="font-size:13px">Renan Calheiros</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · AL</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 40.3M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">51</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.684</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="MARCIO BITTAR" data-partido="PL" data-uf="AC"
+                       data-total="38134658.43" data-conc="100.0"
+                       data-idh="0.71" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">4</td>
+            <td><strong style="font-size:13px">Marcio Bittar</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · AC</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 38.1M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">22</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.71</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="ELIZIANE GAMA" data-partido="PSD" data-uf="MA"
+                       data-total="37491158.43" data-conc="100.0"
+                       data-idh="0.676" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">5</td>
+            <td><strong style="font-size:13px">Eliziane Gama</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · MA</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 37.5M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">27</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.676</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="DR. HIRAN" data-partido="PP" data-uf="RR"
+                       data-total="37095158.43" data-conc="100.0"
+                       data-idh="0.699" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">6</td>
+            <td><strong style="font-size:13px">Dr. Hiran</strong><br>
+                <span style="color:#6b7280;font-size:11px">PP · RR</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 37.1M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">24</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.699</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="JAIME BAGATTOLI" data-partido="PL" data-uf="RO"
+                       data-total="36461135.7" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">7</td>
+            <td><strong style="font-size:13px">Jaime Bagattoli</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · RO</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 36.5M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">44</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="RANDOLFE RODRIGUES" data-partido="PT" data-uf="AP"
+                       data-total="36421817.85" data-conc="100.0"
+                       data-idh="0.688" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">8</td>
+            <td><strong style="font-size:13px">Randolfe Rodrigues</strong><br>
+                <span style="color:#6b7280;font-size:11px">PT · AP</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 36.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">32</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.688</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="CARLOS FAVARO" data-partido="PSD" data-uf="MT"
+                       data-total="36174317.85" data-conc="100.0"
+                       data-idh="0.736" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">9</td>
+            <td><strong style="font-size:13px">Carlos Fávaro</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · MT</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 36.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">23</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.736</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="NELSINHO TRAD" data-partido="PSD" data-uf="MS"
+                       data-total="35442000.0" data-conc="100.0"
+                       data-idh="0.742" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">10</td>
+            <td><strong style="font-size:13px">Nelsinho Trad</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · MS</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 35.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">36</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.742</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="CONFUCIO MOURA" data-partido="MDB" data-uf="RO"
+                       data-total="33600310.92" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">11</td>
+            <td><strong style="font-size:13px">Confúcio Moura</strong><br>
+                <span style="color:#6b7280;font-size:11px">MDB · RO</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 33.6M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">15</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="DAVI ALCOLUMBRE" data-partido="UNIÃO" data-uf="AP"
+                       data-total="33462803.880000003" data-conc="100.0"
+                       data-idh="0.688" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">12</td>
+            <td><strong style="font-size:13px">Davi Alcolumbre</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · AP</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 33.5M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">22</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.688</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="GIORDANO" data-partido="PODEMOS" data-uf="SP"
+                       data-total="32739158.43" data-conc="100.0"
+                       data-idh="0.806" data-nn="0.0">
+            <td style="color:#9ca3af;font-size:11px">13</td>
+            <td><strong style="font-size:13px">Giordano</strong><br>
+                <span style="color:#6b7280;font-size:11px">PODEMOS · SP</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 32.7M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">3</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.806</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">0.0%</td>
+        </tr><tr data-nome="PLINIO VALERIO" data-partido="PSDB" data-uf="AM"
+                       data-total="32580617.85" data-conc="100.0"
+                       data-idh="0.7" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">14</td>
+            <td><strong style="font-size:13px">Plínio Valério</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSDB · AM</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 32.6M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">42</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.7</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="CHICO RODRIGUES" data-partido="PSB" data-uf="RR"
+                       data-total="30759159.42" data-conc="100.0"
+                       data-idh="0.699" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">15</td>
+            <td><strong style="font-size:13px">Chico Rodrigues</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSB · RR</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 30.8M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">9</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.699</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="STYVENSON VALENTIM" data-partido="PODEMOS" data-uf="RN"
+                       data-total="29917654.47" data-conc="100.0"
+                       data-idh="0.728" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">16</td>
+            <td><strong style="font-size:13px">Styvenson Valentim</strong><br>
+                <span style="color:#6b7280;font-size:11px">PODEMOS · RN</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 29.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">44</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.728</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="BETO FARO" data-partido="PT" data-uf="PA"
+                       data-total="29838317.85" data-conc="100.0"
+                       data-idh="0.69" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">17</td>
+            <td><strong style="font-size:13px">Beto Faro</strong><br>
+                <span style="color:#6b7280;font-size:11px">PT · PA</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 29.8M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">18</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.69</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="ROGERIO MARINHO" data-partido="PL" data-uf="RN"
+                       data-total="28946610.0" data-conc="100.0"
+                       data-idh="0.728" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">18</td>
+            <td><strong style="font-size:13px">Rogério Marinho</strong><br>
+                <span style="color:#6b7280;font-size:11px">PL · RN</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 28.9M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">62</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.728</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="SERGIO PETECAO" data-partido="PSD" data-uf="AC"
+                       data-total="28413000.0" data-conc="100.0"
+                       data-idh="0.71" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">19</td>
+            <td><strong style="font-size:13px">Sérgio Petecão</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · AC</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 28.4M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">32</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.71</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="ROGERIO CARVALHO" data-partido="PT" data-uf="SE"
+                       data-total="27957458.43" data-conc="100.0"
+                       data-idh="0.702" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">20</td>
+            <td><strong style="font-size:13px">Rogério Carvalho</strong><br>
+                <span style="color:#6b7280;font-size:11px">PT · SE</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 28.0M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">38</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.702</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="LUCAS BARRETO" data-partido="PSD" data-uf="AP"
+                       data-total="26254658.43" data-conc="100.0"
+                       data-idh="0.688" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">21</td>
+            <td><strong style="font-size:13px">Lucas Barreto</strong><br>
+                <span style="color:#6b7280;font-size:11px">PSD · AP</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 26.3M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">12</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.688</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="LAERCIO OLIVEIRA" data-partido="PP" data-uf="SE"
+                       data-total="26205128.73" data-conc="100.0"
+                       data-idh="0.702" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">22</td>
+            <td><strong style="font-size:13px">Laércio Oliveira</strong><br>
+                <span style="color:#6b7280;font-size:11px">PP · SE</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 26.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">20</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.702</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="CIRO NOGUEIRA" data-partido="PP" data-uf="PI"
+                       data-total="25185317.85" data-conc="100.0"
+                       data-idh="0.69" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">23</td>
+            <td><strong style="font-size:13px">Ciro Nogueira</strong><br>
+                <span style="color:#6b7280;font-size:11px">PP · PI</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 25.2M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">63</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.69</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="ALAN RICK" data-partido="REPUBLICANOS" data-uf="AC"
+                       data-total="24995350.71" data-conc="100.0"
+                       data-idh="0.71" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">24</td>
+            <td><strong style="font-size:13px">Alan Rick</strong><br>
+                <span style="color:#6b7280;font-size:11px">REPUBLICANOS · AC</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 25.0M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">37</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.71</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr><tr data-nome="PROFESSORA DORINHA SEABRA" data-partido="UNIÃO" data-uf="TO"
+                       data-total="24838817.85" data-conc="100.0"
+                       data-idh="0.731" data-nn="100.0">
+            <td style="color:#9ca3af;font-size:11px">25</td>
+            <td><strong style="font-size:13px">Professora Dorinha Seabra</strong><br>
+                <span style="color:#6b7280;font-size:11px">UNIÃO · TO</span></td>
+            <td style="text-align:right;font-weight:700;color:#7c3aed;font-size:13px">R$ 24.8M</td>
+            <td style="text-align:right;color:#6b7280;font-size:12px">59</td>
+            <td><div style="min-width:70px"><div style="background:#7c3aed;width:100.0%;height:5px;border-radius:3px;margin-bottom:2px"></div>
+                <span style="font-size:11px;color:#374151">100.0%</span></div></td>
+            <td style="font-size:12px;color:#374151">0.731</td>
+            <td style="font-size:12px;color:#6b7280">— </td>
+            <td style="font-size:11px;color:#374151">100.0%</td>
+        </tr></tbody>
+    </table>
+    </div>
+    <p class="nota">Senadores têm cota maior (~R$ 52M/ano) por representarem um estado inteiro. IDH destino e redistribuição seguem a mesma lógica.</p>
+  </div>
+
+  <div class="section">
+    <h2>🗺️ Estados que mais recebem — valor vs. IDH</h2>
+    <canvas id="chartUF" style="max-height:240px"></canvas>
+    <p class="nota">Barras = valor recebido (R$ M). Linha laranja = IDH da UF (eixo direito, PNUD 2010). Estados com IDH baixo recebendo muito = redistribuição positiva.</p>
+  </div>
+
+  <div class="grid3">
+    <div class="section">
+      <h2>🟢 Maior redistribuição Norte/Nordeste</h2>
+      <table>
+        <thead><tr><th>#</th><th>Parlamentar</th><th>% N+NE</th><th>IDH dest.</th><th>Total</th></tr></thead>
+        <tbody><tr>
+        <td style="color:#9ca3af;font-size:11px">1</td>
+        <td style="font-size:12px"><strong>Marcos Rogério</strong><br>
+            <span style="color:#6b7280;font-size:10px">PL · RO</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.7</td>
+        <td style="text-align:right;font-size:12px">R$ 41.2M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">2</td>
+        <td style="font-size:12px"><strong>Renan Calheiros</strong><br>
+            <span style="color:#6b7280;font-size:10px">MDB · AL</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.684</td>
+        <td style="text-align:right;font-size:12px">R$ 40.3M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">3</td>
+        <td style="font-size:12px"><strong>Marcio Bittar</strong><br>
+            <span style="color:#6b7280;font-size:10px">PL · AC</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.71</td>
+        <td style="text-align:right;font-size:12px">R$ 38.1M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">4</td>
+        <td style="font-size:12px"><strong>Eliziane Gama</strong><br>
+            <span style="color:#6b7280;font-size:10px">PSD · MA</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.676</td>
+        <td style="text-align:right;font-size:12px">R$ 37.5M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">5</td>
+        <td style="font-size:12px"><strong>Dr. Hiran</strong><br>
+            <span style="color:#6b7280;font-size:10px">PP · RR</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.699</td>
+        <td style="text-align:right;font-size:12px">R$ 37.1M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">6</td>
+        <td style="font-size:12px"><strong>Jaime Bagattoli</strong><br>
+            <span style="color:#6b7280;font-size:10px">PL · RO</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.7</td>
+        <td style="text-align:right;font-size:12px">R$ 36.5M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">7</td>
+        <td style="font-size:12px"><strong>Randolfe Rodrigues</strong><br>
+            <span style="color:#6b7280;font-size:10px">PT · AP</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.688</td>
+        <td style="text-align:right;font-size:12px">R$ 36.4M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">8</td>
+        <td style="font-size:12px"><strong>Fernando Farias</strong><br>
+            <span style="color:#6b7280;font-size:10px">PSD · MG</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.684</td>
+        <td style="text-align:right;font-size:12px">R$ 35.8M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">9</td>
+        <td style="font-size:12px"><strong>Confúcio Moura</strong><br>
+            <span style="color:#6b7280;font-size:10px">MDB · RO</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.7</td>
+        <td style="text-align:right;font-size:12px">R$ 33.6M</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">10</td>
+        <td style="font-size:12px"><strong>Davi Alcolumbre</strong><br>
+            <span style="color:#6b7280;font-size:10px">UNIÃO · AP</span></td>
+        <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">100.0%</td>
+        <td style="text-align:right;font-size:12px">0.688</td>
+        <td style="text-align:right;font-size:12px">R$ 33.5M</td>
+    </tr></tbody>
+      </table>
+      <p class="nota">Parlamentares que mais direcionam emendas para Norte e Nordeste — proxy de redistribuição regional.</p>
+    </div>
+
+    <div class="section">
+      <h2>🏘️ Top 15 municípios</h2>
+      <table>
+        <thead><tr><th>#</th><th>Município</th><th>UF</th><th>IDH UF</th><th>Total</th><th>N</th></tr></thead>
+        <tbody><tr>
+        <td style="color:#9ca3af;font-size:11px">1</td>
+        <td style="font-size:13px">Estado Da Bahia</td>
+        <td style="font-size:11px;color:#6b7280">BA</td>
+        <td style="font-size:11px;color:#374151">0.691</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 58.1M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">36</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">2</td>
+        <td style="font-size:13px">Municipio De Macapa</td>
+        <td style="font-size:11px;color:#6b7280">AP</td>
+        <td style="font-size:11px;color:#374151">0.688</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 56.8M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">15</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">3</td>
+        <td style="font-size:13px">Estado Do Amapa</td>
+        <td style="font-size:11px;color:#6b7280">AP</td>
+        <td style="font-size:11px;color:#374151">0.688</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 54.3M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">26</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">4</td>
+        <td style="font-size:13px">Estado De Mato Grosso Do Sul</td>
+        <td style="font-size:11px;color:#6b7280">MS</td>
+        <td style="font-size:11px;color:#374151">0.742</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 45.8M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">23</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">5</td>
+        <td style="font-size:13px">Estado Do Acre</td>
+        <td style="font-size:11px;color:#6b7280">AC</td>
+        <td style="font-size:11px;color:#374151">0.71</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 40.3M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">46</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">6</td>
+        <td style="font-size:13px">Estado De Sao Paulo</td>
+        <td style="font-size:11px;color:#6b7280">SP</td>
+        <td style="font-size:11px;color:#374151">0.806</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 33.0M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">29</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">7</td>
+        <td style="font-size:13px">Municipio De Sena Madureira</td>
+        <td style="font-size:11px;color:#6b7280">AC</td>
+        <td style="font-size:11px;color:#374151">0.71</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 32.8M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">17</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">8</td>
+        <td style="font-size:13px">Estado Do Para</td>
+        <td style="font-size:11px;color:#6b7280">PA</td>
+        <td style="font-size:11px;color:#374151">0.69</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 30.9M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">9</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">9</td>
+        <td style="font-size:13px">Estado Do Parana</td>
+        <td style="font-size:11px;color:#6b7280">PR</td>
+        <td style="font-size:11px;color:#374151">0.769</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 27.9M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">9</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">10</td>
+        <td style="font-size:13px">Municipio De Mucajai</td>
+        <td style="font-size:11px;color:#6b7280">RR</td>
+        <td style="font-size:11px;color:#374151">0.699</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 27.9M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">18</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">11</td>
+        <td style="font-size:13px">Municipio De Maceio</td>
+        <td style="font-size:11px;color:#6b7280">AL</td>
+        <td style="font-size:11px;color:#374151">0.684</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 27.8M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">12</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">12</td>
+        <td style="font-size:13px">Municipio De Amajari</td>
+        <td style="font-size:11px;color:#6b7280">RR</td>
+        <td style="font-size:11px;color:#374151">0.699</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 22.6M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">11</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">13</td>
+        <td style="font-size:13px">Municipio De Taua</td>
+        <td style="font-size:11px;color:#6b7280">CE</td>
+        <td style="font-size:11px;color:#374151">0.734</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 22.3M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">10</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">14</td>
+        <td style="font-size:13px">Municipio De Pacaraima</td>
+        <td style="font-size:11px;color:#6b7280">RR</td>
+        <td style="font-size:11px;color:#374151">0.699</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 20.9M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">13</td>
+    </tr><tr>
+        <td style="color:#9ca3af;font-size:11px">15</td>
+        <td style="font-size:13px">Municipio De Campos Dos Goytacazes</td>
+        <td style="font-size:11px;color:#6b7280">RJ</td>
+        <td style="font-size:11px;color:#374151">0.762</td>
+        <td style="text-align:right;font-weight:600;font-size:13px">R$ 20.5M</td>
+        <td style="text-align:right;color:#6b7280;font-size:11px">7</td>
+    </tr></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>🗳️ Total por partido</h2>
+      <canvas id="chartPartido"></canvas>
+    </div>
+  </div>
+
+  <!-- Seção IDH por partido -->
+  <div class="section">
+    <h2>📐 IDH médio dos destinos por partido <span style="font-size:12px;font-weight:400;color:#6b7280">— para qual desenvolvimento cada partido manda suas emendas?</span></h2>
+    <canvas id="chartIDHPartido" style="max-height:200px"></canvas>
+    <p class="nota">IDH médio (ponderado pelo valor das emendas) dos estados que receberam os recursos de cada partido. Linha pontilhada = média nacional (~0.70). Partidos abaixo da linha = mais redistributivos; acima = mais concentrados em estados desenvolvidos.</p>
+  </div>
+
+  <!-- Metodologia -->
+  <div class="section">
+    <details>
+    <summary>📖 Metodologia e limitações</summary>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;font-size:13px;line-height:1.75;color:#374151">
+      <div>
+        <h3 style="font-size:13px;font-weight:600;margin-bottom:8px">O que são emendas PIX?</h3>
+        <p>Emendas PIX ("transferências especiais", art. 166-A CF) são verbas federais transferidas diretamente para municípios sem convênio prévio, licitação federal ou projeto específico. A lei exige apenas que 25% vá para saúde ou educação. Cada senador tem cota de ~R$ 52M/ano; cada deputado, ~R$ 18M/ano.</p>
+        <br>
+        <h3 style="font-size:13px;font-weight:600;margin-bottom:8px">O que é o Δ IDH?</h3>
+        <p>Mede se o parlamentar redistribui recursos para regiões mais ou menos desenvolvidas. Um valor positivo (▲ verde) indica que as emendas foram, em média, para estados com IDH menor do que o estado do parlamentar — padrão redistributivo. Negativo (▼ vermelho) indica o contrário.</p>
+        <br>
+        <h3 style="font-size:13px;font-weight:600;margin-bottom:8px">TSE 2022 — por que não há votos por município?</h3>
+        <p>O cruzamento completo "emendas vs. votos por município" requereria o download da base completa de votação por zona eleitoral do TSE (~2GB). Como proxy, usamos concentração geográfica + coincidência de UF como sinal de fidelidade ao eleitorado.</p>
+      </div>
+      <div>
+        <h3 style="font-size:13px;font-weight:600;margin-bottom:8px">Limitações</h3>
+        <ul style="list-style:none;padding:0">
+          <li style="margin-bottom:8px;padding-left:18px;position:relative"><span style="position:absolute;left:0;color:#f59e0b">⚠</span><strong>Cobertura parcial:</strong> apenas emendas PIX (transferências especiais). Não inclui emendas individuais via convênio, emendas de comissão ou bancada.</li>
+          <li style="margin-bottom:8px;padding-left:18px;position:relative"><span style="position:absolute;left:0;color:#f59e0b">⚠</span><strong>Empenhado ≠ pago:</strong> valores refletem empenho, não necessariamente transferências liquidadas.</li>
+          <li style="margin-bottom:8px;padding-left:18px;position:relative"><span style="position:absolute;left:0;color:#f59e0b">⚠</span><strong>IDH 2021 (estadual):</strong> baseado no Radar IDHM/PNUD 2021 (PNAD Contínua). Dado estadual — não reflete desigualdade intraestadual.</li>
+          <li style="margin-bottom:8px;padding-left:18px;position:relative"><span style="position:absolute;left:0;color:#f59e0b">⚠</span><strong>Join por nome:</strong> mesmo com fuzzy match, parlamentares com apelidos muito distintos podem não ser identificados (20 casos).</li>
+          <li style="margin-bottom:8px;padding-left:18px;position:relative"><span style="position:absolute;left:0;color:#f59e0b">⚠</span><strong>Sem destino temático:</strong> emendas PIX não exigem declaração de área — não distinguimos educação de pavimentação.</li>
+        </ul>
+        <br>
+        <h3 style="font-size:13px;font-weight:600;margin-bottom:8px">Fontes</h3>
+        <p><a href="https://www.transferegov.gov.br" target="_blank" style="color:#1d4ed8">TransfereGov</a> · <a href="https://dadosabertos.camara.leg.br" target="_blank" style="color:#1d4ed8">API Câmara</a> · <a href="https://legis.senado.leg.br/dadosabertos" target="_blank" style="color:#1d4ed8">API Senado</a> · <a href="https://servicodados.ibge.gov.br" target="_blank" style="color:#1d4ed8">IBGE</a> · <a href="https://www.atlasbrasil.org.br" target="_blank" style="color:#1d4ed8">Atlas Brasil/PNUD</a></p>
+      </div>
+    </div>
+    </details>
+  </div>
+
+</div>
+
+<script>
+// ── Dados ──────────────────────────────────────────────────────────────────
+const ufLabels = ["MA", "CE", "PA", "SP", "BA", "PE", "AP", "AC", "RR", "RO"];
+const ufVals   = [366.5654625600002, 332.78168285999993, 324.85610717999987, 268.2796446, 250.60919103, 241.64516970000005, 240.10618895999997, 237.45349089000004, 233.06578119000005, 227.07668907000001];
+const ufIDH    = [0.676, 0.734, 0.69, 0.806, 0.691, 0.719, 0.688, 0.71, 0.699, 0.7];
+const scatterRaw = [{"x": 43.38235539000001, "y": 100.0, "label": "Jayme Campos", "partido": "UNI\u00c3O", "idh": 0.736, "nn": 0.0}, {"x": 41.15415645, "y": 100.0, "label": "Marcos Rog\u00e9rio", "partido": "PL", "idh": 0.7, "nn": 100.0}, {"x": 40.2831, "y": 100.0, "label": "Renan Calheiros", "partido": "MDB", "idh": 0.684, "nn": 100.0}, {"x": 38.13465843, "y": 100.0, "label": "Marcio Bittar", "partido": "PL", "idh": 0.71, "nn": 100.0}, {"x": 37.49115843, "y": 100.0, "label": "Eliziane Gama", "partido": "PSD", "idh": 0.676, "nn": 100.0}, {"x": 37.09515843, "y": 100.0, "label": "Dr. Hiran", "partido": "PP", "idh": 0.699, "nn": 100.0}, {"x": 36.4611357, "y": 100.0, "label": "Jaime Bagattoli", "partido": "PL", "idh": 0.7, "nn": 100.0}, {"x": 36.421817850000004, "y": 100.0, "label": "Randolfe Rodrigues", "partido": "PT", "idh": 0.688, "nn": 100.0}, {"x": 36.17431785, "y": 100.0, "label": "Carlos F\u00e1varo", "partido": "PSD", "idh": 0.736, "nn": 0.0}, {"x": 35.80815843, "y": 0.0, "label": "Fernando Farias", "partido": "PSD", "idh": 0.684, "nn": 100.0}, {"x": 35.442, "y": 100.0, "label": "Nelsinho Trad", "partido": "PSD", "idh": 0.742, "nn": 0.0}, {"x": 33.60031092, "y": 100.0, "label": "Conf\u00facio Moura", "partido": "MDB", "idh": 0.7, "nn": 100.0}, {"x": 33.46280388, "y": 100.0, "label": "Davi Alcolumbre", "partido": "UNI\u00c3O", "idh": 0.688, "nn": 100.0}, {"x": 32.739158429999996, "y": 100.0, "label": "Giordano", "partido": "PODEMOS", "idh": 0.806, "nn": 0.0}, {"x": 32.58061785, "y": 100.0, "label": "Pl\u00ednio Val\u00e9rio", "partido": "PSDB", "idh": 0.7, "nn": 100.0}, {"x": 30.759159420000003, "y": 100.0, "label": "Chico Rodrigues", "partido": "PSB", "idh": 0.699, "nn": 100.0}, {"x": 30.3138, "y": 100.0, "label": "Ac\u00e1cio Favacho", "partido": "MDB", "idh": 0.688, "nn": 100.0}, {"x": 29.91765447, "y": 100.0, "label": "Styvenson Valentim", "partido": "PODEMOS", "idh": 0.728, "nn": 100.0}, {"x": 29.838317850000003, "y": 100.0, "label": "Beto Faro", "partido": "PT", "idh": 0.69, "nn": 100.0}, {"x": 28.94661, "y": 100.0, "label": "Rog\u00e9rio Marinho", "partido": "PL", "idh": 0.728, "nn": 100.0}, {"x": 28.413, "y": 100.0, "label": "S\u00e9rgio Petec\u00e3o", "partido": "PSD", "idh": 0.71, "nn": 100.0}, {"x": 28.214182259999998, "y": 100.0, "label": "Capit\u00e3o Alberto Neto", "partido": "PL", "idh": 0.7, "nn": 100.0}, {"x": 27.95745843, "y": 100.0, "label": "Rog\u00e9rio Carvalho", "partido": "PT", "idh": 0.702, "nn": 100.0}, {"x": 26.46209511, "y": 100.0, "label": "Pastor Gil", "partido": "PL", "idh": 0.676, "nn": 100.0}, {"x": 26.25465843, "y": 100.0, "label": "Lucas Barreto", "partido": "PSD", "idh": 0.688, "nn": 100.0}, {"x": 26.205128730000002, "y": 100.0, "label": "La\u00e9rcio Oliveira", "partido": "PP", "idh": 0.702, "nn": 100.0}, {"x": 25.18531785, "y": 100.0, "label": "Ciro Nogueira", "partido": "PP", "idh": 0.69, "nn": 100.0}, {"x": 25.08461208, "y": 100.0, "label": "Julio Lopes", "partido": "PP", "idh": 0.762, "nn": 0.0}, {"x": 24.99535071, "y": 100.0, "label": "Alan Rick", "partido": "REPUBLICANOS", "idh": 0.71, "nn": 100.0}, {"x": 24.83881785, "y": 100.0, "label": "Professora Dorinha Seabra", "partido": "UNI\u00c3O", "idh": 0.731, "nn": 100.0}, {"x": 24.7381101, "y": 100.0, "label": "Idilvan Alencar", "partido": "PDT", "idh": 0.734, "nn": 100.0}, {"x": 24.651, "y": 100.0, "label": "Pastor Diniz", "partido": "UNI\u00c3O", "idh": 0.699, "nn": 100.0}, {"x": 24.552, "y": 100.0, "label": "Ana Paula Lobato", "partido": "PSB", "idh": 0.676, "nn": 100.0}, {"x": 24.391612079999998, "y": 100.0, "label": "Matheus Noronha", "partido": "PL", "idh": 0.734, "nn": 100.0}, {"x": 24.391612079999998, "y": 100.0, "label": "Lucio Mosquini", "partido": "PL", "idh": 0.7, "nn": 100.0}, {"x": 23.884724159999998, "y": 100.0, "label": "Coronel Ulysses", "partido": "UNI\u00c3O", "idh": 0.71, "nn": 100.0}, {"x": 23.6808, "y": 100.0, "label": "Omar Aziz", "partido": "PSD", "idh": 0.7, "nn": 100.0}, {"x": 23.58547785, "y": 100.0, "label": "Alessandro Vieira", "partido": "MDB", "idh": 0.702, "nn": 100.0}, {"x": 23.53215843, "y": 100.0, "label": "Eduardo Gomes", "partido": "PL", "idh": 0.731, "nn": 100.0}, {"x": 23.2848, "y": 100.0, "label": "Sergio Moro", "partido": "PL", "idh": 0.769, "nn": 0.0}, {"x": 23.214891150000003, "y": 100.0, "label": "Duda Ramos", "partido": "MDB", "idh": 0.699, "nn": 100.0}, {"x": 22.98326085, "y": 100.0, "label": "Jos\u00e9 Airton F\u00e9lix Cirilo", "partido": "PT", "idh": 0.734, "nn": 100.0}, {"x": 22.90661109, "y": 100.0, "label": "Dagoberto Nogueira", "partido": "PSDB", "idh": 0.742, "nn": 0.0}, {"x": 22.671, "y": 100.0, "label": "Marx Beltr\u00e3o", "partido": "PP", "idh": 0.684, "nn": 100.0}, {"x": 22.60287414, "y": 100.0, "label": "Renilce Nicodemos", "partido": "MDB", "idh": 0.69, "nn": 100.0}, {"x": 21.978, "y": 100.0, "label": "Magno Malta", "partido": "PL", "idh": 0.771, "nn": 0.0}, {"x": 21.91661208, "y": 100.0, "label": "Duarte Jr.", "partido": "PSB", "idh": 0.676, "nn": 100.0}, {"x": 21.853773810000003, "y": 100.0, "label": "Junior Louren\u00e7o", "partido": "PL", "idh": 0.676, "nn": 100.0}, {"x": 21.78, "y": 100.0, "label": "Veneziano Vital Do R\u00eago", "partido": "MDB", "idh": 0.698, "nn": 100.0}, {"x": 21.71861208, "y": 100.0, "label": "Eun\u00edcio Oliveira", "partido": "MDB", "idh": 0.734, "nn": 100.0}, {"x": 21.481792200000005, "y": 100.0, "label": "Luciano Vieira", "partido": "PSDB", "idh": 0.762, "nn": 0.0}, {"x": 21.32261208, "y": 100.0, "label": "Gustinho Ribeiro", "partido": "REPUBLICANOS", "idh": 0.702, "nn": 100.0}, {"x": 21.148385939999997, "y": 100.0, "label": "Pedro Lucas Fernandes", "partido": "UNI\u00c3O", "idh": 0.676, "nn": 100.0}, {"x": 20.988, "y": 100.0, "label": "Marcelo Castro", "partido": "MDB", "idh": 0.69, "nn": 100.0}];
+const partyLabels = ["PL", "PSD", "MDB", "PP", "UNI\u00c3O", "PT", "REPUBLICANOS", "PSB", "PSDB", "PDT", "PODE", "PODEMOS", "SOLIDARIEDADE", "AVANTE", "PCdoB"];
+const partyTotals = [900.01271151, 645.9629012099999, 573.4311263999998, 531.1528061399998, 460.88071622999996, 434.07191718000007, 386.14639139999997, 178.87453749000005, 166.75817796, 154.46129985, 116.19042633, 92.65947075, 51.625522079999996, 41.957883, 39.08025];
+const partyIDH    = [0.749, 0.732, 0.727, 0.732, 0.726, 0.738, 0.727, 0.726, 0.744, 0.731, 0.749, 0.748, 0.749, 0.737, 0.708];
+const partyNN     = [39.0, 56.4, 62.5, 55.6, 61.1, 50.9, 61.1, 71.4, 23.1, 60.0, 33.3, 40.0, 50.0, 50.0, 80.0];
+const MEDIA_IDH_BR = 0.766; // PNUD Radar IDHM 2021
+
+// ── Chart UF com linha IDH ─────────────────────────────────────────────────
+new Chart(document.getElementById('chartUF'), {
+  data: {
+    labels: ufLabels,
+    datasets: [
+      { type:'bar', label:'R$ milhões', data:ufVals,
+         backgroundColor:'rgba(59,130,246,0.7)', borderRadius:4, yAxisID:'y' },
+      { type:'line', label:'IDH UF (PNUD 2010)', data:ufIDH,
+         borderColor:'#f59e0b', pointBackgroundColor:'#f59e0b',
+         borderWidth:2, pointRadius:4, yAxisID:'y2', tension:0.3 }
+    ]
+  },
+  options:{
+    plugins:{ legend:{ position:'bottom', labels:{font:{size:11}} } },
+    scales:{
+      y:{ beginAtZero:true, title:{display:true,text:'R$ milhões'}, position:'left' },
+      y2:{ min:0.5, max:0.9, title:{display:true,text:'IDH'}, position:'right',
+            grid:{drawOnChartArea:false} }
+    },
+    responsive:true, maintainAspectRatio:true
+  }
+});
+
+
+// ── Partido total (horizontal) ─────────────────────────────────────────────
+new Chart(document.getElementById('chartPartido'), {
+  type:'bar',
+  data:{ labels:partyLabels, datasets:[{ label:'R$ M', data:partyTotals,
+    backgroundColor:['#1d4ed8','#7c3aed','#059669','#d97706','#dc2626',
+      '#0891b2','#65a30d','#c026d3','#ea580c','#64748b','#1d4ed8','#7c3aed','#059669','#d97706','#dc2626'],
+    borderRadius:3 }] },
+  options:{ indexAxis:'y', plugins:{legend:{display:false}},
+    scales:{x:{beginAtZero:true},y:{grid:{display:false}}},
+    responsive:true, maintainAspectRatio:true }
+});
+
+// ── IDH destino por partido ────────────────────────────────────────────────
+new Chart(document.getElementById('chartIDHPartido'), {
+  type:'bar',
+  data:{ labels:partyLabels, datasets:[
+    { label:'IDH médio destino', data:partyIDH,
+       backgroundColor: partyIDH.map(v => v < MEDIA_IDH_BR ? '#059669' : '#3b82f6'),
+       borderRadius:3 },
+  ]},
+  options:{
+    plugins:{ legend:{display:false},
+      annotation:{ annotations:{ line1:{
+        type:'line', yMin:MEDIA_IDH_BR, yMax:MEDIA_IDH_BR,
+        borderColor:'#f59e0b', borderWidth:2, borderDash:[5,5]
+      }}}
+    },
+    scales:{ y:{min:0.55,max:0.85}, x:{grid:{display:false}} },
+    responsive:true, maintainAspectRatio:true
+  }
+});
+
+// ── Melhoria #7: Ordenação de tabelas ─────────────────────────────────────
+function sortTable(tableId, col, type) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const th = table.querySelectorAll('th')[col];
+  const asc = !th.classList.contains('sorted-desc');
+
+  table.querySelectorAll('th').forEach(t => t.classList.remove('sorted-asc','sorted-desc'));
+  th.classList.add(asc ? 'sorted-asc' : 'sorted-desc');
+
+  const getValue = row => {
+    const cell = row.cells[col].textContent.trim();
+    if (type === 'num') return parseFloat(cell.replace('%','').replace(',','.')) || 0;
+    if (type === 'brl') return parseFloat(cell.replace(/R\$|B|M|k|\s|\./g,'').replace(',','.')) || 0;
+    return cell.toLowerCase();
+  };
+
+  rows.sort((a,b) => {
+    const va = getValue(a), vb = getValue(b);
+    return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+  // re-numerar
+  rows.forEach((r,i) => { if(r.cells[0]) r.cells[0].textContent = i+1; });
+}
+
+// ── Melhoria #7: Busca nas tabelas ────────────────────────────────────────
+const filtroAtivo = { dep: '', sen: '' };
+
+function filtrarTabela(tipo) {
+  const search = document.getElementById(`search-${tipo}`).value.toLowerCase();
+  const partido = filtroAtivo[tipo];
+  document.querySelectorAll(`#table-${tipo} tbody tr`).forEach(row => {
+    const nome = (row.dataset.nome || '').toLowerCase();
+    const part = (row.dataset.partido || '').toLowerCase();
+    const uf = (row.dataset.uf || '').toLowerCase();
+    const matchSearch = !search || nome.includes(search) || part.includes(search) || uf.includes(search);
+    const matchPartido = !partido || part === partido.toLowerCase();
+    row.style.display = matchSearch && matchPartido ? '' : 'none';
+  });
+}
+
+function setFiltro(tipo, partido) {
+  filtroAtivo[tipo] = partido;
+  document.querySelectorAll(`#filter-${tipo} .fbtn`).forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === (partido || 'Todos'));
+  });
+  filtrarTabela(tipo);
+}
+</script>
+</body>
+</html>
