@@ -655,11 +655,6 @@ def gerar_html(analise: dict) -> str:
 </head>
 <body>
 
-<div style="background:#fef3c7;border-bottom:1px solid #fde68a;padding:10px 32px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:10px">
-  <span style="font-size:16px">⚠️</span>
-  <span><strong>Versão experimental</strong> — este é um teste inicial com dados públicos automatizados. Os números podem conter erros de coleta, joins incompletos (~7% dos parlamentares não identificados) e valores empenhados (não necessariamente pagos). Não use como referência jornalística sem verificação nas fontes originais: <a href="https://www.transferegov.gov.br" target="_blank" style="color:#92400e">TransfereGov</a> · <a href="https://dadosabertos.camara.leg.br" target="_blank" style="color:#92400e">API Câmara</a> · <a href="https://legis.senado.leg.br/dadosabertos" target="_blank" style="color:#92400e">API Senado</a>.</span>
-</div>
-
 <div class="header">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
     <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 100 100">
