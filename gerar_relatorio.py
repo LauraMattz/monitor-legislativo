@@ -544,6 +544,31 @@ def gerar_html(analise: dict) -> str:
         key=lambda x: x.get('pct_norte_nordeste', 0), reverse=True
     )[:10]
 
+    # Dados regionais para seção de contexto
+    with open('data/emendas-data.json') as f:
+        _em = json.load(f)['emendas']
+    por_regiao_ctx = {}
+    for e in _em:
+        reg = REGIAO_UF.get(e.get('uf', ''), '?')
+        por_regiao_ctx[reg] = por_regiao_ctx.get(reg, 0) + e['valor']
+    total_ctx = sum(por_regiao_ctx.values())
+    regioes_order = [('NE','Nordeste','#ef4444'),('N','Norte','#f97316'),
+                     ('SE','Sudeste','#3b82f6'),('CO','Centro-Oeste','#8b5cf6'),('S','Sul','#22c55e')]
+    bar_regiao = ''
+    for cod, nome_reg, cor in regioes_order:
+        v = por_regiao_ctx.get(cod, 0)
+        pct = v / total_ctx * 100
+        bar_regiao += f'''<div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+            <span style="font-weight:600">{nome_reg}</span>
+            <span style="color:#6b7280">R$ {v/1e9:.2f}B &nbsp;·&nbsp; {pct:.1f}%</span>
+          </div>
+          <div style="background:#f3f4f6;border-radius:4px;height:8px">
+            <div style="background:{cor};width:{pct:.1f}%;height:8px;border-radius:4px"></div>
+          </div>
+        </div>'''
+    pct_nn_total = (por_regiao_ctx.get('NE', 0) + por_regiao_ctx.get('N', 0)) / total_ctx * 100
+
     party_labels = list(por_partido.keys())
     party_totals = [por_partido[p]['total']/1e6 for p in party_labels]
     party_idh = [por_partido[p].get('media_idh_destino') or 0 for p in party_labels]
@@ -792,6 +817,50 @@ def gerar_html(analise: dict) -> str:
     <h2>📐 IDH médio dos destinos por partido <span style="font-size:12px;font-weight:400;color:#6b7280">— para qual desenvolvimento cada partido manda suas emendas?</span></h2>
     <canvas id="chartIDHPartido" style="max-height:200px"></canvas>
     <p class="nota">IDH médio (ponderado pelo valor das emendas) dos estados que receberam os recursos de cada partido. Linha pontilhada = média nacional (~0.70). Partidos abaixo da linha = mais redistributivos; acima = mais concentrados em estados desenvolvidos.</p>
+  </div>
+
+  <!-- Contexto -->
+  <div class="section">
+    <h2>📚 Contexto: o que são emendas PIX e por que existem?</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;font-size:13px;line-height:1.8;color:#374151">
+      <div>
+        <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;color:#111">O que são</h3>
+        <p>Emendas PIX são o nome popular das <strong>transferências especiais</strong> criadas pela Emenda Constitucional 105/2019 (art. 166-A da Constituição). Permitem que parlamentares federais transfiram recursos diretamente para municípios e estados <strong>sem convênio, sem licitação federal e sem projeto específico prévio</strong>. O dinheiro cai na conta do ente público em até 90 dias após o empenho — daí o apelido "PIX".</p>
+        <br>
+        <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;color:#111">Por que foram criadas</h3>
+        <p>O argumento oficial foi <strong>desburocratizar</strong> o repasse de verbas federais, que historicamente envolvia convênios demorados, prestações de contas complexas e execução travada. Na prática, também transferiu poder decisório do Executivo para o Legislativo: antes, o governo federal decidia onde o dinheiro ia; agora, cada parlamentar decide sozinho.</p>
+        <br>
+        <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;color:#111">A única regra</h3>
+        <p>A lei exige que <strong>ao menos 25% do valor</strong> seja aplicado em ações de saúde ou educação. Os outros 75% podem ir para qualquer finalidade — pavimentação, iluminação pública, compra de equipamentos, eventos. O município não precisa prestar contas ao parlamentar, apenas ao Tribunal de Contas da União.</p>
+      </div>
+      <div>
+        <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;color:#111">Quanto cada parlamentar tem</h3>
+        <div style="background:#f9fafb;border-radius:8px;padding:14px;margin-bottom:14px">
+          <table style="width:100%;font-size:12px;border-collapse:collapse">
+            <tr style="border-bottom:1px solid #e5e7eb">
+              <th style="text-align:left;padding:5px 8px;color:#6b7280;font-weight:600">Cargo</th>
+              <th style="text-align:right;padding:5px 8px;color:#6b7280;font-weight:600">Cota anual</th>
+              <th style="text-align:right;padding:5px 8px;color:#6b7280;font-weight:600">Total da casa</th>
+            </tr>
+            <tr style="border-bottom:1px solid #f3f4f6">
+              <td style="padding:6px 8px;font-weight:600">Senador</td>
+              <td style="padding:6px 8px;text-align:right;color:#1d4ed8;font-weight:700">~R$ 52M/ano</td>
+              <td style="padding:6px 8px;text-align:right;color:#6b7280">~R$ 4,2B (81 senadores)</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600">Deputado Federal</td>
+              <td style="padding:6px 8px;text-align:right;color:#7c3aed;font-weight:700">~R$ 18M/ano</td>
+              <td style="padding:6px 8px;text-align:right;color:#6b7280">~R$ 9,2B (513 deputados)</td>
+            </tr>
+          </table>
+        </div>
+        <h3 style="font-size:13px;font-weight:700;margin-bottom:10px;color:#111">Onde o dinheiro vai — por região (2025)</h3>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          {bar_regiao}
+        </div>
+        <p style="font-size:11px;color:#9ca3af;margin-top:10px">Norte e Nordeste concentram {pct_nn_total:.0f}% dos repasses — não por altruísmo, mas porque é onde estão os estados com mais parlamentares por habitante e maiores cotas relativas.</p>
+      </div>
+    </div>
   </div>
 
   <!-- Metodologia -->
