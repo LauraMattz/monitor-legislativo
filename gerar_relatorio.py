@@ -62,6 +62,7 @@ REGIAO_UF = {
 # Formato: nome_raw_transferegov (exato) → {partido, uf, tipo}
 ALIAS_MAP = {
     # Senadores ausentes da API (afastados/em missão no período de coleta)
+    'Fernando Farias':     {'partido': 'MDB',    'uf': 'AL', 'tipo': 'senador'},  # suplente de Renan Filho/AL — NÃO é Luiz Fernando Faria/PSD/MG
     'Rodrigo Cunha':       {'partido': 'UNIÃO',  'uf': 'AL', 'tipo': 'senador'},
     'Mecias de Jesus':     {'partido': 'REPUBLICANOS', 'uf': 'RR', 'tipo': 'senador'},
     'Roseana Sarney':      {'partido': 'MDB',    'uf': 'MA', 'tipo': 'senador'},
