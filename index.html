@@ -49,6 +49,11 @@
 </head>
 <body>
 
+<div style="background:#fef3c7;border-bottom:1px solid #fde68a;padding:10px 32px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:10px">
+  <span style="font-size:16px">⚠️</span>
+  <span><strong>Versão experimental</strong> — este é um teste inicial com dados públicos automatizados. Os números podem conter erros de coleta, joins incompletos (~7% dos parlamentares não identificados) e valores empenhados (não necessariamente pagos). Não use como referência jornalística sem verificação nas fontes originais: <a href="https://www.transferegov.gov.br" target="_blank" style="color:#92400e">TransfereGov</a> · <a href="https://dadosabertos.camara.leg.br" target="_blank" style="color:#92400e">API Câmara</a> · <a href="https://legis.senado.leg.br/dadosabertos" target="_blank" style="color:#92400e">API Senado</a>.</span>
+</div>
+
 <div class="header">
   <h1>💸 Placar de Emendas PIX 2025</h1>
   <div class="sub">Onde cada parlamentar federal mandou seu dinheiro</div>
@@ -1105,5 +1110,23 @@ function setFiltro(tipo, partido) {
   filtrarTabela(tipo);
 }
 </script>
+
+<div style="background:#0f2044;color:#fff;padding:28px 32px;margin-top:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:6px">💸 Monitor Legislativo</div>
+      <div style="font-size:13px;opacity:.7;line-height:1.6">
+        Versão experimental · dados 100% públicos<br>
+        TransfereGov · API Câmara · API Senado · IBGE · PNUD 2021
+      </div>
+    </div>
+    <div style="font-size:12px;opacity:.6;line-height:1.8;text-align:right">
+      Powered by <a href="https://github.com/jxnxts/mcp-brasil" target="_blank" style="color:#60a5fa;text-decoration:none">mcp-brasil</a><br>
+      Código aberto em <a href="https://github.com/LauraMattz/monitor-legislativo" target="_blank" style="color:#60a5fa;text-decoration:none">github.com/LauraMattz/monitor-legislativo</a><br>
+      Gerado em 2026-04-08
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
