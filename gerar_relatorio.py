@@ -962,10 +962,13 @@ function setFiltro(tipo, partido) {{
         TransfereGov · API Câmara · API Senado · IBGE · PNUD 2021
       </div>
     </div>
-    <div style="font-size:12px;opacity:.6;line-height:1.8;text-align:right">
-      Powered by <a href="https://github.com/jxnxts/mcp-brasil" target="_blank" style="color:#60a5fa;text-decoration:none">mcp-brasil</a><br>
-      Código aberto em <a href="https://github.com/LauraMattz/monitor-legislativo" target="_blank" style="color:#60a5fa;text-decoration:none">github.com/LauraMattz/monitor-legislativo</a><br>
-      Gerado em {hoje}
+    <div style="font-size:12px;opacity:.6;line-height:1.9;text-align:right">
+      Feito por <strong style="opacity:1;color:#fff">Laura Mattos</strong><br>
+      <a href="https://github.com/LauraMattz" target="_blank" style="color:#60a5fa;text-decoration:none">GitHub</a>
+      · <a href="https://www.linkedin.com/in/lauramattosc" target="_blank" style="color:#60a5fa;text-decoration:none">LinkedIn</a>
+      · <a href="https://github.com/LauraMattz/monitor-legislativo" target="_blank" style="color:#60a5fa;text-decoration:none">Código aberto</a><br>
+      Powered by <a href="https://github.com/jxnxts/mcp-brasil" target="_blank" style="color:#60a5fa;text-decoration:none">mcp-brasil</a>
+      · Gerado em {hoje}
     </div>
   </div>
 </div>
