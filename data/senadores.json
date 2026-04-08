@@ -1,0 +1,650 @@
+[
+  {
+    "id": 5672,
+    "nome": "Alan Rick",
+    "nome_completo": "Alan Rick Miranda",
+    "partido": "REPUBLICANOS",
+    "uf": "AC",
+    "tipo": "senador"
+  },
+  {
+    "id": 5982,
+    "nome": "Alessandro Vieira",
+    "nome_completo": "Alessandro Vieira",
+    "partido": "MDB",
+    "uf": "SE",
+    "tipo": "senador"
+  },
+  {
+    "id": 6358,
+    "nome": "Ana Paula Lobato",
+    "nome_completo": "Ana Paula Dias Lobato Nova Alves",
+    "partido": "PSB",
+    "uf": "MA",
+    "tipo": "senador"
+  },
+  {
+    "id": 5967,
+    "nome": "Angelo Coronel",
+    "nome_completo": "Angelo Mario Coronel de Azevedo Martins",
+    "partido": "REPUBLICANOS",
+    "uf": "BA",
+    "tipo": "senador"
+  },
+  {
+    "id": 6009,
+    "nome": "Astronauta Marcos Pontes",
+    "nome_completo": "Marcos Cesar Pontes",
+    "partido": "PL",
+    "uf": "SP",
+    "tipo": "senador"
+  },
+  {
+    "id": 4639,
+    "nome": "Beto Faro",
+    "nome_completo": "José Roberto Oliveira Faro",
+    "partido": "PT",
+    "uf": "PA",
+    "tipo": "senador"
+  },
+  {
+    "id": 6372,
+    "nome": "Bruno Bonetti",
+    "nome_completo": "Bruno Bierrenbach Bonetti",
+    "partido": "PL",
+    "uf": "RJ",
+    "tipo": "senador"
+  },
+  {
+    "id": 6336,
+    "nome": "Camilo Santana",
+    "nome_completo": "Camilo Sobreira de Santana",
+    "partido": "PT",
+    "uf": "CE",
+    "tipo": "senador"
+  },
+  {
+    "id": 6295,
+    "nome": "Carlos Fávaro",
+    "nome_completo": "Carlos Henrique Baqueta Fávaro",
+    "partido": "PSD",
+    "uf": "MT",
+    "tipo": "senador"
+  },
+  {
+    "id": 5936,
+    "nome": "Carlos Portinho",
+    "nome_completo": "Carlos Francisco Portinho",
+    "partido": "PL",
+    "uf": "RJ",
+    "tipo": "senador"
+  },
+  {
+    "id": 5990,
+    "nome": "Carlos Viana",
+    "nome_completo": "Carlos Alberto Dias Viana",
+    "partido": "PODEMOS",
+    "uf": "MG",
+    "tipo": "senador"
+  },
+  {
+    "id": 470,
+    "nome": "Chico Rodrigues",
+    "nome_completo": "Francisco de Assis Rodrigues",
+    "partido": "PSB",
+    "uf": "RR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5973,
+    "nome": "Cid Gomes",
+    "nome_completo": "Cid Ferreira Gomes",
+    "partido": "PSB",
+    "uf": "CE",
+    "tipo": "senador"
+  },
+  {
+    "id": 739,
+    "nome": "Ciro Nogueira",
+    "nome_completo": "Ciro Nogueira Lima Filho",
+    "partido": "PP",
+    "uf": "PI",
+    "tipo": "senador"
+  },
+  {
+    "id": 6337,
+    "nome": "Cleitinho",
+    "nome_completo": "Cleiton Gontijo de Azevedo",
+    "partido": "REPUBLICANOS",
+    "uf": "MG",
+    "tipo": "senador"
+  },
+  {
+    "id": 475,
+    "nome": "Confúcio Moura",
+    "nome_completo": "Confúcio Aires Moura",
+    "partido": "MDB",
+    "uf": "RO",
+    "tipo": "senador"
+  },
+  {
+    "id": 6335,
+    "nome": "Damares Alves",
+    "nome_completo": "Damares Regina Alves",
+    "partido": "REPUBLICANOS",
+    "uf": "DF",
+    "tipo": "senador"
+  },
+  {
+    "id": 5998,
+    "nome": "Daniella Ribeiro",
+    "nome_completo": "Daniella Velloso Borges Ribeiro",
+    "partido": "PP",
+    "uf": "PB",
+    "tipo": "senador"
+  },
+  {
+    "id": 3830,
+    "nome": "Davi Alcolumbre",
+    "nome_completo": "David Samuel Alcolumbre Tobelem",
+    "partido": "UNIÃO",
+    "uf": "AP",
+    "tipo": "senador"
+  },
+  {
+    "id": 5793,
+    "nome": "Dr. Hiran",
+    "nome_completo": "Hiran Manuel Gonçalves da Silva",
+    "partido": "PP",
+    "uf": "RR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5906,
+    "nome": "Dra. Eudócia",
+    "nome_completo": "Eudocia Maria Holanda de Araujo Caldas",
+    "partido": "PL",
+    "uf": "AL",
+    "tipo": "senador"
+  },
+  {
+    "id": 4994,
+    "nome": "Eduardo Braga",
+    "nome_completo": "Carlos Eduardo de Souza Braga",
+    "partido": "MDB",
+    "uf": "AM",
+    "tipo": "senador"
+  },
+  {
+    "id": 5976,
+    "nome": "Eduardo Girão",
+    "nome_completo": "Luis Eduardo Grangeiro Girão",
+    "partido": "NOVO",
+    "uf": "CE",
+    "tipo": "senador"
+  },
+  {
+    "id": 3777,
+    "nome": "Eduardo Gomes",
+    "nome_completo": "Carlos Eduardo Torres Gomes",
+    "partido": "PL",
+    "uf": "TO",
+    "tipo": "senador"
+  },
+  {
+    "id": 4642,
+    "nome": "Efraim Filho",
+    "nome_completo": "Efraim de Araújo Morais Filho",
+    "partido": "UNIÃO",
+    "uf": "PB",
+    "tipo": "senador"
+  },
+  {
+    "id": 5718,
+    "nome": "Eliziane Gama",
+    "nome_completo": "Eliziane Pereira Gama Melo",
+    "partido": "PSD",
+    "uf": "MA",
+    "tipo": "senador"
+  },
+  {
+    "id": 22,
+    "nome": "Esperidião Amin",
+    "nome_completo": "Esperidião Amin Helou Filho",
+    "partido": "PP",
+    "uf": "SC",
+    "tipo": "senador"
+  },
+  {
+    "id": 5953,
+    "nome": "Fabiano Contarato",
+    "nome_completo": "Fabiano Contarato",
+    "partido": "PT",
+    "uf": "ES",
+    "tipo": "senador"
+  },
+  {
+    "id": 5917,
+    "nome": "Fernando Dueire",
+    "nome_completo": "Fernando Antonio Caminha Dueire",
+    "partido": "PSD",
+    "uf": "PE",
+    "tipo": "senador"
+  },
+  {
+    "id": 345,
+    "nome": "Flávio Arns",
+    "nome_completo": "Flávio José Arns",
+    "partido": "PSB",
+    "uf": "PR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5894,
+    "nome": "Flávio Bolsonaro",
+    "nome_completo": "Flávio Nantes Bolsonaro",
+    "partido": "PL",
+    "uf": "RJ",
+    "tipo": "senador"
+  },
+  {
+    "id": 6008,
+    "nome": "Giordano",
+    "nome_completo": "Alexandre Luiz Giordano",
+    "partido": "PODEMOS",
+    "uf": "SP",
+    "tipo": "senador"
+  },
+  {
+    "id": 6341,
+    "nome": "Hamilton Mourão",
+    "nome_completo": "Antonio Hamilton Martins Mourão",
+    "partido": "REPUBLICANOS",
+    "uf": "RS",
+    "tipo": "senador"
+  },
+  {
+    "id": 5008,
+    "nome": "Humberto Costa",
+    "nome_completo": "Humberto Sérgio Costa Lima",
+    "partido": "PT",
+    "uf": "PE",
+    "tipo": "senador"
+  },
+  {
+    "id": 5385,
+    "nome": "Irajá",
+    "nome_completo": "Irajá Silvestre Filho",
+    "partido": "PSD",
+    "uf": "TO",
+    "tipo": "senador"
+  },
+  {
+    "id": 6010,
+    "nome": "Ivete da Silveira",
+    "nome_completo": "Ivete Marli Appel da Silveira",
+    "partido": "MDB",
+    "uf": "SC",
+    "tipo": "senador"
+  },
+  {
+    "id": 4770,
+    "nome": "Izalci Lucas",
+    "nome_completo": "Izalci Lucas Ferreira",
+    "partido": "PL",
+    "uf": "DF",
+    "tipo": "senador"
+  },
+  {
+    "id": 35,
+    "nome": "Jader Barbalho",
+    "nome_completo": "Jader Fontenelle Barbalho",
+    "partido": "MDB",
+    "uf": "PA",
+    "tipo": "senador"
+  },
+  {
+    "id": 6340,
+    "nome": "Jaime Bagattoli",
+    "nome_completo": "Jaime Maximino Bagattoli",
+    "partido": "PL",
+    "uf": "RO",
+    "tipo": "senador"
+  },
+  {
+    "id": 581,
+    "nome": "Jaques Wagner",
+    "nome_completo": "Jaques Wagner",
+    "partido": "PT",
+    "uf": "BA",
+    "tipo": "senador"
+  },
+  {
+    "id": 4531,
+    "nome": "Jayme Campos",
+    "nome_completo": "Jayme Veríssimo de Campos",
+    "partido": "UNIÃO",
+    "uf": "MT",
+    "tipo": "senador"
+  },
+  {
+    "id": 5895,
+    "nome": "Jorge Kajuru",
+    "nome_completo": "Jorge Kajuru Reis da Costa Nasser",
+    "partido": "PSB",
+    "uf": "GO",
+    "tipo": "senador"
+  },
+  {
+    "id": 6342,
+    "nome": "Jorge Seif",
+    "nome_completo": "Jorge Seif Júnior",
+    "partido": "PL",
+    "uf": "SC",
+    "tipo": "senador"
+  },
+  {
+    "id": 6369,
+    "nome": "Jussara Lima",
+    "nome_completo": "Antônia Jussara Gomes Alves Sousa Lima",
+    "partido": "PSD",
+    "uf": "PI",
+    "tipo": "senador"
+  },
+  {
+    "id": 4811,
+    "nome": "Laércio Oliveira",
+    "nome_completo": "Laércio José de Oliveira",
+    "partido": "PP",
+    "uf": "SE",
+    "tipo": "senador"
+  },
+  {
+    "id": 5979,
+    "nome": "Leila Barros",
+    "nome_completo": "Leila Gomes de Barros Rêgo",
+    "partido": "PDT",
+    "uf": "DF",
+    "tipo": "senador"
+  },
+  {
+    "id": 5926,
+    "nome": "Lucas Barreto",
+    "nome_completo": "Luiz Cantuária Barreto",
+    "partido": "PSD",
+    "uf": "AP",
+    "tipo": "senador"
+  },
+  {
+    "id": 1186,
+    "nome": "Luis Carlos Heinze",
+    "nome_completo": "Luis Carlos Heinze",
+    "partido": "PP",
+    "uf": "RS",
+    "tipo": "senador"
+  },
+  {
+    "id": 631,
+    "nome": "Magno Malta",
+    "nome_completo": "Magno Pereira Malta",
+    "partido": "PL",
+    "uf": "ES",
+    "tipo": "senador"
+  },
+  {
+    "id": 5376,
+    "nome": "Mara Gabrilli",
+    "nome_completo": "Mara Cristina Gabrilli",
+    "partido": "PSD",
+    "uf": "SP",
+    "tipo": "senador"
+  },
+  {
+    "id": 742,
+    "nome": "Marcelo Castro",
+    "nome_completo": "Marcelo Costa e Castro",
+    "partido": "MDB",
+    "uf": "PI",
+    "tipo": "senador"
+  },
+  {
+    "id": 285,
+    "nome": "Marcio Bittar",
+    "nome_completo": "Marcio Miguel Bittar",
+    "partido": "PL",
+    "uf": "AC",
+    "tipo": "senador"
+  },
+  {
+    "id": 5422,
+    "nome": "Marcos Rogério",
+    "nome_completo": "Marcos Rogério da Silva Brito",
+    "partido": "PL",
+    "uf": "RO",
+    "tipo": "senador"
+  },
+  {
+    "id": 5942,
+    "nome": "Marcos do Val",
+    "nome_completo": "Marcos Ribeiro do Val",
+    "partido": "AVANTE",
+    "uf": "ES",
+    "tipo": "senador"
+  },
+  {
+    "id": 5985,
+    "nome": "Nelsinho Trad",
+    "nome_completo": "Nelson Trad Filho",
+    "partido": "PSD",
+    "uf": "MS",
+    "tipo": "senador"
+  },
+  {
+    "id": 5525,
+    "nome": "Omar Aziz",
+    "nome_completo": "Omar José Abdel Aziz",
+    "partido": "PSD",
+    "uf": "AM",
+    "tipo": "senador"
+  },
+  {
+    "id": 5924,
+    "nome": "Oriovisto Guimarães",
+    "nome_completo": "Oriovisto Guimaraes",
+    "partido": "PSDB",
+    "uf": "PR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5523,
+    "nome": "Otto Alencar",
+    "nome_completo": "Otto Roberto Mendonça de Alencar",
+    "partido": "PSD",
+    "uf": "BA",
+    "tipo": "senador"
+  },
+  {
+    "id": 825,
+    "nome": "Paulo Paim",
+    "nome_completo": "Paulo Renato Paim",
+    "partido": "PT",
+    "uf": "RS",
+    "tipo": "senador"
+  },
+  {
+    "id": 5502,
+    "nome": "Plínio Valério",
+    "nome_completo": "Francisco Plínio Valério Tomaz",
+    "partido": "PSDB",
+    "uf": "AM",
+    "tipo": "senador"
+  },
+  {
+    "id": 5386,
+    "nome": "Professora Dorinha Seabra",
+    "nome_completo": "Maria Auxiliadora Seabra Rezende",
+    "partido": "UNIÃO",
+    "uf": "TO",
+    "tipo": "senador"
+  },
+  {
+    "id": 5012,
+    "nome": "Randolfe Rodrigues",
+    "nome_completo": "Randolph Frederich Rodrigues Alves",
+    "partido": "PT",
+    "uf": "AP",
+    "tipo": "senador"
+  },
+  {
+    "id": 70,
+    "nome": "Renan Calheiros",
+    "nome_completo": "José Renan Vasconcelos Calheiros",
+    "partido": "MDB",
+    "uf": "AL",
+    "tipo": "senador"
+  },
+  {
+    "id": 5207,
+    "nome": "Renan Filho",
+    "nome_completo": "José Renan Vasconcelos Calheiros Filho",
+    "partido": "MDB",
+    "uf": "AL",
+    "tipo": "senador"
+  },
+  {
+    "id": 6025,
+    "nome": "Roberta Acioly",
+    "nome_completo": "Roberta Leontina Xisto Acioly",
+    "partido": "REPUBLICANOS",
+    "uf": "RR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5732,
+    "nome": "Rodrigo Pacheco",
+    "nome_completo": "Rodrigo Otavio Soares Pacheco",
+    "partido": "PSD",
+    "uf": "MG",
+    "tipo": "senador"
+  },
+  {
+    "id": 4694,
+    "nome": "Rogerio Marinho",
+    "nome_completo": "Rogério Simonetti Marinho",
+    "partido": "PL",
+    "uf": "RN",
+    "tipo": "senador"
+  },
+  {
+    "id": 5352,
+    "nome": "Rogério Carvalho",
+    "nome_completo": "Rogério Carvalho Santos",
+    "partido": "PT",
+    "uf": "SE",
+    "tipo": "senador"
+  },
+  {
+    "id": 6331,
+    "nome": "Sergio Moro",
+    "nome_completo": "Sergio Fernando Moro",
+    "partido": "PL",
+    "uf": "PR",
+    "tipo": "senador"
+  },
+  {
+    "id": 5988,
+    "nome": "Soraya Thronicke",
+    "nome_completo": "Soraya Vieira Thronicke",
+    "partido": "PODEMOS",
+    "uf": "MS",
+    "tipo": "senador"
+  },
+  {
+    "id": 5959,
+    "nome": "Styvenson Valentim",
+    "nome_completo": "Eann Styvenson Valentim Mendes",
+    "partido": "PODEMOS",
+    "uf": "RN",
+    "tipo": "senador"
+  },
+  {
+    "id": 4560,
+    "nome": "Sérgio Petecão",
+    "nome_completo": "Sérgio de Oliveira Cunha",
+    "partido": "PSD",
+    "uf": "AC",
+    "tipo": "senador"
+  },
+  {
+    "id": 6338,
+    "nome": "Teresa Leitão",
+    "nome_completo": "Maria Teresa Leitão de Melo",
+    "partido": "PT",
+    "uf": "PE",
+    "tipo": "senador"
+  },
+  {
+    "id": 5736,
+    "nome": "Tereza Cristina",
+    "nome_completo": "Tereza Cristina Correa da Costa Dias",
+    "partido": "PP",
+    "uf": "MS",
+    "tipo": "senador"
+  },
+  {
+    "id": 5899,
+    "nome": "Vanderlan Cardoso",
+    "nome_completo": "Vanderlan Vieira Cardoso",
+    "partido": "PSD",
+    "uf": "GO",
+    "tipo": "senador"
+  },
+  {
+    "id": 5748,
+    "nome": "Veneziano Vital do Rêgo",
+    "nome_completo": "Veneziano Vital do Rêgo Segundo Neto",
+    "partido": "MDB",
+    "uf": "PB",
+    "tipo": "senador"
+  },
+  {
+    "id": 1173,
+    "nome": "Wellington Fagundes",
+    "nome_completo": "Wellington Antonio Fagundes",
+    "partido": "PL",
+    "uf": "MT",
+    "tipo": "senador"
+  },
+  {
+    "id": 5411,
+    "nome": "Weverton",
+    "nome_completo": "Weverton Rocha Marques de Sousa",
+    "partido": "PDT",
+    "uf": "MA",
+    "tipo": "senador"
+  },
+  {
+    "id": 5070,
+    "nome": "Wilder Morais",
+    "nome_completo": "Wilder Pedro de Morais",
+    "partido": "PL",
+    "uf": "GO",
+    "tipo": "senador"
+  },
+  {
+    "id": 5783,
+    "nome": "Zenaide Maia",
+    "nome_completo": "Zenaide Maia Calado Pereira dos Santos",
+    "partido": "PSD",
+    "uf": "RN",
+    "tipo": "senador"
+  },
+  {
+    "id": 3806,
+    "nome": "Zequinha Marinho",
+    "nome_completo": "José da Cruz Marinho",
+    "partido": "PODEMOS",
+    "uf": "PA",
+    "tipo": "senador"
+  }
+]

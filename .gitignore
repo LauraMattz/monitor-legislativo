@@ -1,0 +1,24 @@
+# Cache de dados (gerado automaticamente pelo script)
+data/emendas-data.json
+data/analise.json
+data/municipios-ibge.json
+data/ceap-data.json
+
+# HTMLs gerados
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Claude / MCP local
+.claude/
+.mcp.json
+
+# OS
+.DS_Store
+Thumbs.db
