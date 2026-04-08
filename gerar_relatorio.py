@@ -56,6 +56,66 @@ REGIAO_UF = {
     'PR':'S','RS':'S','SC':'S',
 }
 
+# ─── Aliases: apelidos no TransfereGov → dados corretos ─────────────────────
+# Parlamentares cujo apelido no TransfereGov difere do nome parlamentar na API
+# Câmara/Senado. Identificados manualmente via busca pública.
+# Formato: nome_raw_transferegov (exato) → {partido, uf, tipo}
+ALIAS_MAP = {
+    # Senadores ausentes da API (afastados/em missão no período de coleta)
+    'Rodrigo Cunha':       {'partido': 'UNIÃO',  'uf': 'AL', 'tipo': 'senador'},
+    'Mecias de Jesus':     {'partido': 'REPUBLICANOS', 'uf': 'RR', 'tipo': 'senador'},
+    'Roseana Sarney':      {'partido': 'MDB',    'uf': 'MA', 'tipo': 'senador'},
+    'Otto Alencar Filho':  {'partido': 'PSD',    'uf': 'BA', 'tipo': 'senador'},
+    # Deputados com apelido muito diferente do nome parlamentar na API da Câmara
+    'Fausto Santos Jr.':   {'partido': 'UNIÃO',    'uf': 'AM', 'tipo': 'deputado'},  # → "Fausto Jr."
+    'Professora Goreth':   {'partido': 'PDT',      'uf': 'AP', 'tipo': 'deputado'},
+    'Detinha':             {'partido': 'PL',       'uf': 'MA', 'tipo': 'deputado'},
+    'Gerlen Diniz':        {'partido': 'PP',       'uf': 'AC', 'tipo': 'deputado'},
+    'Josimar Maranhãozinho': {'partido': 'PL',     'uf': 'MA', 'tipo': 'deputado'},
+    'Sonize Barbosa':      {'partido': 'PL',       'uf': 'AP', 'tipo': 'deputado'},
+    'Yury do Paredão':     {'partido': 'MDB',      'uf': 'CE', 'tipo': 'deputado'},
+    'Dra. Mayra Pinheiro': {'partido': 'PL',       'uf': 'CE', 'tipo': 'deputado'},
+    'Lebrão':              {'partido': 'UNIÃO',    'uf': 'RO', 'tipo': 'deputado'},
+    'Marreca Filho':       {'partido': 'PSD',      'uf': 'MA', 'tipo': 'deputado'},
+    'Tadeu Oliveira':      {'partido': 'PL',       'uf': 'CE', 'tipo': 'deputado'},
+    'Paulinho Freire':     {'partido': 'UNIÃO',    'uf': 'RN', 'tipo': 'deputado'},
+    'Silvia Waiãpi':       {'partido': 'PODE',     'uf': 'AP', 'tipo': 'deputado'},
+    'Augusto Puppio':      {'partido': 'MDB',      'uf': 'AM', 'tipo': 'deputado'},
+    # Parlamentares que saíram do cargo em 2025 (emendas empenhadas antes da saída)
+    'Dayany Bittencourt':  {'partido': 'UNIÃO',    'uf': 'CE', 'tipo': 'deputado'},  # licença saúde fev/2026
+    'Dr. Benjamim':        {'partido': 'UNIÃO',    'uf': 'MA', 'tipo': 'deputado'},  # saiu jan/2025 → prefeito
+    'Luis Tibé':           {'partido': 'AVANTE',   'uf': 'MG', 'tipo': 'deputado'},
+    'Abilio Brunini':      {'partido': 'PL',       'uf': 'MT', 'tipo': 'deputado'},  # saiu jan/2025 → prefeito
+    'Romário':             {'partido': 'PL',       'uf': 'RJ', 'tipo': 'senador'},
+    'Delegado Ramagem':    {'partido': 'PL',       'uf': 'RJ', 'tipo': 'deputado'},  # perda mandato dez/2025
+    'Reginete Bispo':      {'partido': 'PT',       'uf': 'RS', 'tipo': 'deputado'},
+    'Carmen Zanotto':      {'partido': 'CIDADANIA',    'uf': 'SC', 'tipo': 'deputado'}, # saiu jan/2025 → prefeita
+    # Demais apelidos sem match pelo fuzzy
+    'Eduardo Bolsonaro':   {'partido': 'PL',           'uf': 'SP', 'tipo': 'deputado'},
+    'Carla Zambelli':      {'partido': 'PL',           'uf': 'SP', 'tipo': 'deputado'},
+    'Vicentinho':          {'partido': 'PT',           'uf': 'SP', 'tipo': 'deputado'},
+    'Ossesio Silva':       {'partido': 'REPUBLICANOS', 'uf': 'PE', 'tipo': 'deputado'},
+    'Newton Bonin':        {'partido': 'PP',           'uf': 'SC', 'tipo': 'deputado'},
+    'Ely Santos':          {'partido': 'REPUBLICANOS', 'uf': 'SP', 'tipo': 'deputado'},
+    'Lázaro Botelho':      {'partido': 'PP',           'uf': 'TO', 'tipo': 'deputado'},
+}
+
+# Partidos que NÃO usam (ou usam muito pouco) emendas PIX — dado relevante para análise
+# Fonte: TransfereGov 2025 + Transparência Brasil (2024)
+PARTIDOS_SEM_EMENDA_PIX = {
+    'PSOL': {
+        'motivo': 'Posição política contrária ao mecanismo. Nenhum dos 12 deputados do PSOL '
+                  'indicou emendas PIX em 2025. O partido critica a falta de transparência '
+                  'e a ausência de vinculação temática das transferências especiais.',
+        'n_parlamentares': 12, 'tipo': 'ideológico'
+    },
+    'NOVO': {
+        'motivo': 'Usou apenas ~10% da cota disponível em 2024 (Transparência Brasil). '
+                  'Posição liberal contra transferências diretas sem accountability.',
+        'n_parlamentares': 3, 'tipo': 'ideológico'
+    },
+}
+
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
 def esc(s) -> str:
@@ -343,20 +403,30 @@ async def main():
     join_map = {}   # nome_emenda_upper → parl_data
     sem_match = []
 
+    # Pré-normaliza as chaves do ALIAS_MAP para comparação (chaves em totais_parl são norm())
+    alias_map_norm = {norm(k): v for k, v in ALIAS_MAP.items()}
+
+    n_exato = n_alias = n_fuzzy = 0
     for nome_raw in totais_parl:
         nome_norm = norm(nome_raw)
         if nome_norm in parl_index:
             join_map[nome_raw] = parl_index[nome_norm]
+            n_exato += 1
+        elif nome_norm in alias_map_norm:
+            join_map[nome_raw] = {**alias_map_norm[nome_norm], 'nome': nome_raw, 'id': None}
+            n_alias += 1
         else:
             match_key = melhor_match(nome_norm, all_keys, cutoff=0.82)
             if match_key:
                 join_map[nome_raw] = parl_index[match_key]
+                n_fuzzy += 1
             else:
                 sem_match.append(nome_raw)
 
-    print(f"  Match exato: {sum(1 for n in totais_parl if norm(n) in parl_index)}")
-    print(f"  Match fuzzy: {len(join_map) - sum(1 for n in totais_parl if norm(n) in parl_index)}")
-    print(f"  Sem match:   {len(sem_match)}")
+    print(f"  Match exato:  {n_exato}")
+    print(f"  Match alias:  {n_alias}")
+    print(f"  Match fuzzy:  {n_fuzzy}")
+    print(f"  Sem match:    {len(sem_match)}")
     if sem_match:
         print(f"  Não encontrados: {sem_match[:10]}")
 
@@ -508,7 +578,8 @@ async def main():
             'n_emendas': len(emendas),
             'media_por_parlamentar': total_geral / len(ranking) if ranking else 0,
             'sem_match': sem_match[:20],
-        }
+        },
+        'partidos_sem_emenda': PARTIDOS_SEM_EMENDA_PIX,
     }
 
     with open('data/analise.json', 'w') as f:
@@ -527,12 +598,49 @@ async def main():
 
 # ─── Geração do HTML (Melhoria #7: interativo) ───────────────────────────────
 
+def _build_filtros(tipo: str, partidos: list) -> str:
+    """Gera botões de filtro por partido de forma dinâmica."""
+    import html as _h
+    parts = []
+    for p in partidos:
+        p_esc = _h.escape(p, quote=True)
+        parts.append(
+            f'<span class="fbtn" onclick="setFiltro(\'{tipo}\',\'{p_esc}\')">{p_esc}</span>'
+        )
+    return '\n      '.join(parts)
+
+
+def _build_sem_emenda_cards(partidos_sem_emenda: dict, esc_fn) -> str:
+    """Gera cards HTML para partidos que não usam emendas PIX."""
+    parts = []
+    for p, v in partidos_sem_emenda.items():
+        ideologico = v.get('tipo') == 'ideológico'
+        cor_borda = '#dc2626' if ideologico else '#f59e0b'
+        cor_bg    = '#fee2e2' if ideologico else '#fef3c7'
+        cor_txt   = '#991b1b' if ideologico else '#92400e'
+        label     = 'Posição ideológica' if ideologico else 'Baixo uso'
+        parts.append(
+            f'<div style="background:#f9fafb;border-radius:10px;padding:14px 16px;'
+            f'margin-bottom:10px;border-left:4px solid {cor_borda}">'
+            f'<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">'
+            f'<strong style="font-size:14px;color:#111">{esc_fn(p)}</strong>'
+            f'<span style="font-size:11px;background:{cor_bg};color:{cor_txt};'
+            f'padding:2px 8px;border-radius:999px">{label}</span>'
+            f'<span style="font-size:11px;color:#6b7280">{v["n_parlamentares"]} parlamentar(es)</span>'
+            f'</div>'
+            f'<p style="font-size:12px;color:#6b7280;margin:0;line-height:1.6">{esc_fn(v["motivo"])}</p>'
+            f'</div>'
+        )
+    return '\n'.join(parts)
+
+
 def gerar_html(analise: dict) -> str:
     ranking = analise['ranking']
     por_partido = analise['por_partido']
     top_munis = analise['top_municipios']
     top_ufs = analise['top_ufs_destino']
     resumo = analise['resumo']
+    partidos_sem_emenda = analise.get('partidos_sem_emenda', {})
     hoje = date.today().isoformat()
 
     top_deps = [r for r in ranking if r['tipo'] == 'deputado'][:25]
@@ -730,11 +838,7 @@ def gerar_html(analise: dict) -> str:
     </div>
     <div class="filter-btns" id="filter-dep">
       <span class="fbtn active" onclick="setFiltro('dep','')">Todos</span>
-      <span class="fbtn" onclick="setFiltro('dep','PT')">PT</span>
-      <span class="fbtn" onclick="setFiltro('dep','PL')">PL</span>
-      <span class="fbtn" onclick="setFiltro('dep','UNIÃO')">UNIÃO</span>
-      <span class="fbtn" onclick="setFiltro('dep','MDB')">MDB</span>
-      <span class="fbtn" onclick="setFiltro('dep','PSD')">PSD</span>
+      {_build_filtros('dep', sorted(set(r['partido'] for r in top_deps if r['partido'] not in ('?',''))))}
     </div>
     <div style="overflow-x:auto">
     <table id="table-dep">
@@ -817,6 +921,21 @@ def gerar_html(analise: dict) -> str:
     <h2>📐 IDH médio dos destinos por partido <span style="font-size:12px;font-weight:400;color:#6b7280">— para qual desenvolvimento cada partido manda suas emendas?</span></h2>
     <canvas id="chartIDHPartido" style="max-height:200px"></canvas>
     <p class="nota">IDH médio (ponderado pelo valor das emendas) dos estados que receberam os recursos de cada partido. Linha pontilhada = média nacional (~0.70). Partidos abaixo da linha = mais redistributivos; acima = mais concentrados em estados desenvolvidos.</p>
+  </div>
+
+  <!-- Partidos que não usam emendas PIX -->
+  <div class="section">
+    <h2>🚫 Partidos que não usam emendas PIX</h2>
+    <p style="font-size:13px;color:#374151;margin-bottom:14px">
+      Nem todos os partidos com representação no Congresso indicam emendas PIX.
+      Isso pode refletir posição política, estratégia eleitoral ou simplesmente baixa adesão ao mecanismo.
+    </p>
+    {_build_sem_emenda_cards(partidos_sem_emenda, esc)}
+    <p class="nota" style="margin-top:10px">
+      ⚠️ A ausência de emendas PIX <strong>não significa</strong> que o parlamentar não usa outras modalidades de emenda
+      (emendas individuais via convênio, de comissão ou de bancada). O volume total por parlamentar pode ser
+      significativamente maior do que aparece neste painel.
+    </p>
   </div>
 
   <!-- Contexto -->
