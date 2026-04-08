@@ -953,7 +953,12 @@ function setFiltro(tipo, partido) {{
 }}
 </script>
 
-<div style="background:#0f2044;color:#fff;padding:28px 32px;margin-top:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+<div style="background:#fef3c7;border-top:1px solid #fde68a;border-bottom:1px solid #fde68a;padding:10px 32px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:10px">
+  <span style="font-size:16px">⚠️</span>
+  <span><strong>Versão experimental</strong> — este é um teste inicial com dados públicos automatizados. Os números podem conter erros de coleta, joins incompletos (~7% dos parlamentares não identificados) e valores empenhados (não necessariamente pagos). Não use como referência jornalística sem verificação nas fontes originais: <a href="https://www.transferegov.gov.br" target="_blank" style="color:#92400e">TransfereGov</a> · <a href="https://dadosabertos.camara.leg.br" target="_blank" style="color:#92400e">API Câmara</a> · <a href="https://legis.senado.leg.br/dadosabertos" target="_blank" style="color:#92400e">API Senado</a>.</span>
+</div>
+
+<div style="background:#0f2044;color:#fff;padding:28px 32px;margin-top:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
   <div style="max-width:900px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap">
     <div>
       <div style="font-size:18px;font-weight:800;margin-bottom:6px">💸 Monitor Legislativo</div>
