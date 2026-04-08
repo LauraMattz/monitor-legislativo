@@ -6,6 +6,7 @@ Uso: python gerar_relatorio.py
 """
 import asyncio
 import difflib
+import html as _html
 import httpx
 import json
 import os
@@ -22,6 +23,8 @@ from mcp_brasil.data.transferegov.tools import buscar_emendas_pix
 # ─── Constantes ──────────────────────────────────────────────────────────────
 
 ANO = int(sys.argv[1]) if len(sys.argv) > 1 else 2025
+if not 2020 <= ANO <= 2030:
+    sys.exit(f"Erro: ano {ANO} fora do intervalo permitido (2020–2030)")
 
 UFS = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT',
        'PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']
@@ -54,6 +57,11 @@ REGIAO_UF = {
 }
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
+
+def esc(s) -> str:
+    """Escapa caracteres HTML para prevenir XSS ao inserir dados de API no template."""
+    return _html.escape(str(s), quote=True)
+
 
 def norm(nome: str) -> str:
     """Normaliza nome: maiúsculas, sem acento, sem pontuação extra."""
@@ -330,7 +338,8 @@ async def main():
     all_keys = list(parl_index.keys())
 
     # Melhoria #1: join por fuzzy match
-    totais_parl = json.load(open('data/emendas-data.json'))['totais_por_parlamentar']
+    with open('data/emendas-data.json') as f:
+        totais_parl = json.load(f)['totais_por_parlamentar']
     join_map = {}   # nome_emenda_upper → parl_data
     sem_match = []
 
@@ -354,7 +363,8 @@ async def main():
     # ── Melhoria #3: IDH por UF de destino das emendas ──────────────────────
     print("\nCalculando perfil IDH dos destinos...")
 
-    emendas = json.load(open('data/emendas-data.json'))['emendas']
+    with open('data/emendas-data.json') as f:
+        emendas = json.load(f)['emendas']
 
     # Para cada parlamentar: IDH médio ponderado dos municípios que receberam emendas
     emendas_por_parl = {}
@@ -419,7 +429,8 @@ async def main():
         # CEAP do cache se disponível
         ceap_val = 0
         if os.path.exists('data/ceap-data.json') and pid:
-            ceap = json.load(open('data/ceap-data.json'))
+            with open('data/ceap-data.json') as f:
+                ceap = json.load(f)
             if str(pid) in ceap:
                 ceap_val = ceap[str(pid)].get(f'ceap_estimado_{ANO}', 0)
 
@@ -556,17 +567,17 @@ def gerar_html(analise: dict) -> str:
         seta = '▲' if delta and delta > 0 else ('▼' if delta and delta < 0 else '—')
         cor_seta = '#059669' if delta and delta > 0 else ('#dc2626' if delta and delta < 0 else '#6b7280')
         conc_bar = f'<div style="background:{cor};width:{r["conc_home_state_pct"]}%;height:5px;border-radius:3px;margin-bottom:2px"></div>'
-        return f"""<tr data-nome="{norm(r['nome'])}" data-partido="{r['partido']}" data-uf="{r['uf']}"
+        return f"""<tr data-nome="{esc(norm(r['nome']))}" data-partido="{esc(r['partido'])}" data-uf="{esc(r['uf'])}"
                        data-total="{r['total_emendas']}" data-conc="{r['conc_home_state_pct']}"
-                       data-idh="{idh_d}" data-nn="{pct_nn}">
+                       data-idh="{esc(idh_d)}" data-nn="{esc(pct_nn)}">
             <td style="color:#9ca3af;font-size:11px">{i}</td>
-            <td><strong style="font-size:13px">{r['nome'].title()}</strong><br>
-                <span style="color:#6b7280;font-size:11px">{r['partido']} · {r['uf']}</span></td>
+            <td><strong style="font-size:13px">{esc(r['nome'].title())}</strong><br>
+                <span style="color:#6b7280;font-size:11px">{esc(r['partido'])} · {esc(r['uf'])}</span></td>
             <td style="text-align:right;font-weight:700;color:{cor};font-size:13px">{brl(r['total_emendas'])}</td>
             <td style="text-align:right;color:#6b7280;font-size:12px">{r['n_emendas']}</td>
             <td><div style="min-width:70px">{conc_bar}
                 <span style="font-size:11px;color:#374151">{r['conc_home_state_pct']}%</span></div></td>
-            <td style="font-size:12px;color:#374151">{idh_d if idh_d else '—'}</td>
+            <td style="font-size:12px;color:#374151">{esc(idh_d) if idh_d else '—'}</td>
             <td style="font-size:12px;color:{cor_seta}">{seta} {f'{abs(delta):.3f}' if delta else ''}</td>
             <td style="font-size:11px;color:#374151">{f'{pct_nn}%' if pct_nn != '' else '—'}</td>
         </tr>"""
@@ -576,8 +587,8 @@ def gerar_html(analise: dict) -> str:
 
     rows_muni = ''.join(f"""<tr>
         <td style="color:#9ca3af;font-size:11px">{i}</td>
-        <td style="font-size:13px">{m['municipio'].title()}</td>
-        <td style="font-size:11px;color:#6b7280">{m['uf']}</td>
+        <td style="font-size:13px">{esc(m['municipio'].title())}</td>
+        <td style="font-size:11px;color:#6b7280">{esc(m['uf'])}</td>
         <td style="font-size:11px;color:#374151">{IDH_UF.get(m['uf'], '—')}</td>
         <td style="text-align:right;font-weight:600;font-size:13px">{brl(m['total'])}</td>
         <td style="text-align:right;color:#6b7280;font-size:11px">{m['n']}</td>
@@ -585,8 +596,8 @@ def gerar_html(analise: dict) -> str:
 
     rows_redist = ''.join(f"""<tr>
         <td style="color:#9ca3af;font-size:11px">{i}</td>
-        <td style="font-size:12px"><strong>{r['nome'].title()}</strong><br>
-            <span style="color:#6b7280;font-size:10px">{r['partido']} · {r['uf']}</span></td>
+        <td style="font-size:12px"><strong>{esc(r['nome'].title())}</strong><br>
+            <span style="color:#6b7280;font-size:10px">{esc(r['partido'])} · {esc(r['uf'])}</span></td>
         <td style="text-align:right;font-size:12px;font-weight:600;color:#059669">{r.get('pct_norte_nordeste',0):.1f}%</td>
         <td style="text-align:right;font-size:12px">{r.get('idh_destino_medio','—')}</td>
         <td style="text-align:right;font-size:12px">{brl(r['total_emendas'])}</td>
@@ -643,6 +654,11 @@ def gerar_html(analise: dict) -> str:
 </head>
 <body>
 
+<div style="background:#fef3c7;border-bottom:1px solid #fde68a;padding:10px 32px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:10px">
+  <span style="font-size:16px">⚠️</span>
+  <span><strong>Versão experimental</strong> — este é um teste inicial com dados públicos automatizados. Os números podem conter erros de coleta, joins incompletos (~7% dos parlamentares não identificados) e valores empenhados (não necessariamente pagos). Não use como referência jornalística sem verificação nas fontes originais: <a href="https://www.transferegov.gov.br" target="_blank" style="color:#92400e">TransfereGov</a> · <a href="https://dadosabertos.camara.leg.br" target="_blank" style="color:#92400e">API Câmara</a> · <a href="https://legis.senado.leg.br/dadosabertos" target="_blank" style="color:#92400e">API Senado</a>.</span>
+</div>
+
 <div class="header">
   <h1>💸 Placar de Emendas PIX {ANO}</h1>
   <div class="sub">Onde cada parlamentar federal mandou seu dinheiro</div>
@@ -659,12 +675,12 @@ def gerar_html(analise: dict) -> str:
 <div class="destaques">
   <div class="destaque">
     <div class="d-label">💰 Quem mais distribuiu</div>
-    <div class="d-nome">{ranking[0]['nome'].title()}</div>
-    <div class="d-val">{brl(ranking[0]['total_emendas'])} · {ranking[0]['partido']}/{ranking[0]['uf']}</div>
+    <div class="d-nome">{esc(ranking[0]['nome'].title())}</div>
+    <div class="d-val">{brl(ranking[0]['total_emendas'])} · {esc(ranking[0]['partido'])}/{esc(ranking[0]['uf'])}</div>
   </div>
   <div class="destaque verde">
     <div class="d-label">🌿 Mais redistributivo (Δ IDH)</div>
-    <div class="d-nome">{redist_ranking[0]['nome'].title() if redist_ranking else '—'}</div>
+    <div class="d-nome">{esc(redist_ranking[0]['nome'].title()) if redist_ranking else '—'}</div>
     <div class="d-val">{f"IDH destino {redist_ranking[0].get('idh_destino_medio','—')} · {redist_ranking[0].get('pct_norte_nordeste',0):.0f}% para N+NE" if redist_ranking else ''}</div>
   </div>
   <div class="destaque laranja">
@@ -926,6 +942,24 @@ function setFiltro(tipo, partido) {{
   filtrarTabela(tipo);
 }}
 </script>
+
+<div style="background:#0f2044;color:#fff;padding:28px 32px;margin-top:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:6px">💸 Monitor Legislativo</div>
+      <div style="font-size:13px;opacity:.7;line-height:1.6">
+        Versão experimental · dados 100% públicos<br>
+        TransfereGov · API Câmara · API Senado · IBGE · PNUD 2021
+      </div>
+    </div>
+    <div style="font-size:12px;opacity:.6;line-height:1.8;text-align:right">
+      Powered by <a href="https://github.com/jxnxts/mcp-brasil" target="_blank" style="color:#60a5fa;text-decoration:none">mcp-brasil</a><br>
+      Código aberto em <a href="https://github.com/LauraMattz/monitor-legislativo" target="_blank" style="color:#60a5fa;text-decoration:none">github.com/LauraMattz/monitor-legislativo</a><br>
+      Gerado em {hoje}
+    </div>
+  </div>
+</div>
+
 </body>
 </html>"""
 
